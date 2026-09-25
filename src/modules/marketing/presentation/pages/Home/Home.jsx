@@ -11,6 +11,7 @@ import Hero from "../../components/Hero/Hero";
 // import Blog from "../Blog/Blog/Blog";
 import Pricing from "../../components/Pricing/Pricing";
 import HiringPartners from "../../components/HiringPartners/HiringPartner";
+import Organization from "../Contact/Contact";
 
 const Home = () => {
   return (
@@ -39,6 +40,8 @@ const Home = () => {
 
       {/* FAQ Section */}
       <FAQ />
+      <Organization/>
+     
   
     </>
     
