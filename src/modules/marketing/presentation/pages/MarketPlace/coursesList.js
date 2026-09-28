@@ -3,12 +3,14 @@ import cloudDevOps from "../../../../../assets/marketplaceImages/cloud-devops.pn
 import aiData from "../../../../../assets/marketplaceImages/ai-data.png";
 import testing from "../../../../../assets/marketplaceImages/testing.png";
 import career from "../../../../../assets/marketplaceImages/career.png";
+import AwsDevops from "../../../../../assets/cardImages/AWS_Develop.png";
+
 
 import reactFullStack from "../../../../../assets/cardImages/MERNstack1.png";
 import pythonFullStack from "../../../../../assets/cardImages/pythonFullStack.png";
 import javaFullStack from "../../../../../assets/cardImages/javaFullStack.png";
 import mernStack from "../../../../../assets/cardImages/MERNstack1.png";
-
+import Testing from "../../../../../assets/cardImages/Testing.png"
 
 export const courses = [
   {
@@ -76,7 +78,7 @@ export const courses = [
     price: "₹6,999",
     oldPrice: "₹10,999",
     students: "980 students",
-    image: cloudDevOps,
+    image: AwsDevops,
   },
 
   {
@@ -178,7 +180,7 @@ export const courses = [
     price: "₹3,499",
     oldPrice: "₹5,999",
     students: "1,520 students",
-    image: testing,
+    image: Testing,
   },
 
   {
