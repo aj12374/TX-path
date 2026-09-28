@@ -902,6 +902,7 @@
 }
 
 .blog-modal-dialog {
+  margin-top: 70px;
   position: relative;
   width: 100%;
   max-width: 42rem;
@@ -910,14 +911,14 @@
   overflow: hidden;
   box-shadow: var(--shadow-2xl);
   z-index: 10;
-  max-height: 90vh;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
 }
 
 .blog-modal-header-img-box {
   position: relative;
-  height: 15rem;
+  height: 20rem;
   width: 100%;
   overflow: hidden;
   background-color: var(--slate-900);

@@ -181,7 +181,7 @@ export default function About() {
                 );})}
               </div>
               <div className="about-hero-actions">
-                <Link to="/" className="about-hero-btn-primary">Explore Programs <ArrowRight className="about-btn-icon" /></Link>
+                <Link to="/marketplace" className="about-hero-btn-primary">Explore Programs <ArrowRight className="about-btn-icon" /></Link>
                 <Link to="/learner-journey" className="about-hero-btn-secondary">View 3-Step Journey</Link>
               </div>
               <div className="about-hero-trust-strip">
@@ -338,7 +338,7 @@ export default function About() {
               <h2 className="about-cta-title">Begin Your Journey With TX-PathWing Today</h2>
               <p className="about-cta-desc">Take the first step towards an extraordinary career in tech. Explore our comprehensive learning tracks or experience our structured learner journey.</p>
               <div className="about-cta-actions">
-                <Link to="/" className="about-btn-primary">Explore Programs <ArrowRight className="about-btn-icon" /></Link>
+                <Link to="/marketplace" className="about-btn-primary">Explore Programs <ArrowRight className="about-btn-icon" /></Link>
                 <Link to="/learner-journey" className="about-btn-secondary">View 3-Step Journey</Link>
               </div>
             </div>
