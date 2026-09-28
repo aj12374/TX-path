@@ -2,10 +2,8 @@ import React from "react";
 import "./Hero.css";
 import heroSkills from "./heroSkills";
 import SkillsOrbit from "./SkillsOrbit";
+import { Link } from "react-router-dom";
 
-// =========================================================
-// INDIVIDUAL HEADING WORD
-// =========================================================
 
 function HeroWord({ children, highlight = false }) {
   return (
@@ -15,9 +13,6 @@ function HeroWord({ children, highlight = false }) {
   );
 }
 
-// =========================================================
-// SKILL ITEM
-// =========================================================
 
 function HeroSkill({ skill }) {
   return (
@@ -38,21 +33,11 @@ function HeroSkill({ skill }) {
   );
 }
 
-// =========================================================
-// MOVING SKILLS
-// =========================================================
-
-// =========================================================
-// MOVING HERO SKILLS
-// =========================================================
 
 function HeroSkills() {
   return (
     <div className="hero-skills-wrapper">
       <div className="hero-skills-track">
-        {/* ===============================================
-            GROUP 1
-        =============================================== */}
 
         <div className="hero-skills-group">
           {heroSkills.map((skill) => (
@@ -60,10 +45,6 @@ function HeroSkills() {
           ))}
         </div>
 
-        {/* ===============================================
-            GROUP 2
-            Duplicate for seamless animation
-        =============================================== */}
 
         <div className="hero-skills-group" aria-hidden="true">
           {heroSkills.map((skill) => (
@@ -74,22 +55,13 @@ function HeroSkills() {
     </div>
   );
 }
-// =========================================================
-// HERO COMPONENT
-// =========================================================
 
 export default function Hero() {
   return (
     <section className="hero-section">
       <div className="hero-container">
-        {/* =================================================
-            LEFT SIDE
-        ================================================= */}
 
         <div className="hero-left">
-          {/* ===============================================
-              EYEBROW
-          =============================================== */}
 
           <div className="hero-eyebrow">
             <span>LXP</span>
@@ -107,14 +79,7 @@ export default function Hero() {
             <span>MARKETPLACE</span>
           </div>
 
-          {/* ===============================================
-              MAIN HEADING
-          =============================================== */}
-
           <h1 className="hero-title">
-            {/* ---------------------------------------------
-                LINE 1
-            --------------------------------------------- */}
 
             <span className="hero-title-line">
               <HeroWord>From</HeroWord>
@@ -124,9 +89,6 @@ export default function Hero() {
               <HeroWord>lesson</HeroWord>
             </span>
 
-            {/* ---------------------------------------------
-                LINE 2
-            --------------------------------------------- */}
 
             <span className="hero-title-line">
               <HeroWord>to</HeroWord>
@@ -138,10 +100,6 @@ export default function Hero() {
               <HeroWord>on</HeroWord>
             </span>
 
-            {/* ---------------------------------------------
-                LINE 3
-            --------------------------------------------- */}
-
             <span className="hero-title-line">
               <HeroWord>one</HeroWord>
 
@@ -149,9 +107,6 @@ export default function Hero() {
             </span>
           </h1>
 
-          {/* ===============================================
-              DESCRIPTION
-          =============================================== */}
 
           <p className="hero-description">
             Pathwing closes the loop between learning and employment. Courses,
@@ -161,36 +116,23 @@ export default function Hero() {
             spreadsheet.
           </p>
 
-          {/* ===============================================
-              ACTION BUTTONS
-          =============================================== */}
-
           <div className="hero-actions">
-            <button type="button" className="hero-button hero-button-primary">
+            <Link to="/marketplace" className="hero-button hero-button-primary">
               <span>Explore programs</span>
 
               <span className="hero-button-arrow">→</span>
-            </button>
+            </Link>
 
             <button type="button" className="hero-button hero-button-secondary">
               Book a platform demo
             </button>
           </div>
 
-          {/* ===============================================
-              MOVING SKILLS
-              DIRECTLY BELOW BUTTONS
-          =============================================== */}
           <HeroSkills />
           
 
 
         </div>
-
-        {/* =================================================
-    RIGHT SIDE
-    SKILLS ORBIT
-================================================= */}
 
         <div className="hero-right">
           <SkillsOrbit />
