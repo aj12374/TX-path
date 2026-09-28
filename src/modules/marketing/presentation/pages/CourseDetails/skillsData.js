@@ -7,6 +7,7 @@ import java from "../../../../../assets/cardImages/javaFullStack.png"
 import python from "../../../../../assets/cardImages/pythonFullStack3.png"
 import MERN from "../../../../../assets/cardImages/MERNstack1.png"
 
+
 /* =========================================================
    MARKETPLACE BANNER IMAGES
 ========================================================= */
@@ -123,6 +124,7 @@ export const courses = [
   {
     id: 5,
     title: "AWS Cloud & DevOps",
+    image:MERN,
     instructor: "Rahul Kumar",
     duration: "12 weeks",
     lessons: "90 lessons",
