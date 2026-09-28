@@ -29,8 +29,8 @@ export default function VerificationSection() {
   const handlePrintCertificate = () => {
     window.print();
   };
-
-  React.useEffect(() => {
+// runs the code after rendering.
+   React.useEffect(() => {    
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
         setShowCert(false);

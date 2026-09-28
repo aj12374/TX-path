@@ -56,14 +56,13 @@ const programs = [
    Main Component
    ───────────────────────────────────────────── */
 const ProgramsSection = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0); 
   const [animating, setAnimating] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const intervalRef = useRef(null);
   const progressRef = useRef(null);
-
-  const INTERVAL_DURATION = 2500;
-  const ANIMATION_DURATION = 400;
+  const INTERVAL_DURATION = 2500; // Duration of each program display in milliseconds
+  const ANIMATION_DURATION = 400; // Duration of the fade animation in milliseconds
 
   /* Go to a specific program index */
   const goTo = useCallback(
@@ -88,6 +87,7 @@ const ProgramsSection = () => {
       return;
     }
 
+    // setInterval() → automatically changes the program after a certain time.
     intervalRef.current = setInterval(() => {
       setAnimating(true);
       setTimeout(() => {
@@ -112,7 +112,7 @@ const ProgramsSection = () => {
     >
       <div className="pt-showcase-container">
         {/* Section Header */}
-        <div className="pt-showcase-header">
+        {/* <div className="pt-showcase-header">
           <h2 className="pt-showcase-title">
             Build Skills. <br />
             <span>Launch Your Career.</span>
@@ -122,7 +122,7 @@ const ProgramsSection = () => {
             <br />
             exposure, and the confidence to take your next career step.
           </p>
-        </div>
+        </div> */}
 
         {/* Main Content Area */}
         <div className="pt-showcase-body">
