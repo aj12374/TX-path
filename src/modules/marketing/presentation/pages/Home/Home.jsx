@@ -11,41 +11,48 @@ import Hero from "../../components/Hero/Hero";
 // import Blog from "../Blog/Blog/Blog";
 import Pricing from "../../components/Pricing/Pricing";
 import HiringPartners from "../../components/HiringPartners/HiringPartner";
-import Organization from "../Contact/Contact";
-
+import WhoWeAre from "../../components/WhoWeAre/WhoWeAre";
+import StudentReviews from "../StudentReviews/StudentReviews";
+import Programtraning from "../../components/ProgramTraning/programtraning";
+import InternshipSection from "../../components/Internship/Internship";
+import Contact from "../Contact/ContactForm";
+ 
 const Home = () => {
   return (
     <>
-    <Hero/>
-
-      {/* Learner Journey Section */}
-      <LearnerJourney />
-
+      <Hero />
+ 
+     
+ 
+      {/* who we are Section */}
+      <WhoWeAre />
+      {/* Delivery Modes Section */}
+      <OnePlatform />
+ 
+      < Programtraning />
+ 
+      <Mode />
+ 
+      < InternshipSection/>
+ 
       {/* Courses Section */}
       <Courses />
-
-      {/* Delivery Modes Section */}
-      <Mode />
-      <OnePlatform />
-      <TrustSection />
-
-       {/* One Platform */}
-      
+     
       <HiringPartners />
-
+ 
       {/* CTA / Credential Verification */}
       <CTA />
-
-      <Pricing />
-
+ 
+ 
+      <StudentReviews/>
+ 
       {/* FAQ Section */}
       <FAQ />
-      <Organization/>
-     
-  
+ 
     </>
-    
+   
   );
 }
-
+ 
 export default Home;
+ 

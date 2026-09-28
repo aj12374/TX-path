@@ -15,6 +15,11 @@ const NAV_LINKS = [
   },
 
   {
+    label: "About us",
+    path: "/about",
+  },
+
+  {
     label: "Events",
     path: "/events",
   },
@@ -25,11 +30,8 @@ const NAV_LINKS = [
   },
 
   {
-    label: "Institutions",
-  },
-
-  {
-    label: "Pricing",
+    label: "Explore",
+    path: "/marketplace",
   },
 
   {
@@ -38,14 +40,10 @@ const NAV_LINKS = [
   },
 
   {
-    label: "Marketplace",
-    path: "/marketplace",
+    label: "Contact",
+    path: "/contact",
   },
 
-  {
-    label: "About us",
-    path: "/about",
-  },
 ];
 
 export default function Header() {
