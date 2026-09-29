@@ -21,18 +21,18 @@ const Home = () => {
   return (
     <>
       <Hero />
- 
-     
- 
+
+      
+
       {/* who we are Section */}
       <WhoWeAre />
       {/* Delivery Modes Section */}
       <OnePlatform />
  
       < Programtraning />
- 
+
       <Mode />
- 
+
       < InternshipSection/>
  
       {/* Courses Section */}
