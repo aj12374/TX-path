@@ -1,11 +1,13 @@
 import { useState } from "react";
 import "./Events.css";
 import {events} from "./events"
+import { useNavigate } from "react-router-dom";
 
 function Events() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [modeFilter, setModeFilter] = useState(null);
   const [flippedEvent, setFlippedEvent] = useState(null);
+  const navigate = useNavigate();
 
   const filteredEvents = events.filter((event) => {
     const matchesType =
@@ -93,6 +95,7 @@ function Events() {
         )}
       </div>
 
+
       <div className="event-list">
         {filteredEvents.length > 0 ? (
           filteredEvents.map((event, index) => (
@@ -101,6 +104,7 @@ function Events() {
               className={`event-card-container ${
                 flippedEvent === event.id ? "flipped" : ""
               }`}
+              className="event-card"
               style={{
                 animationDelay: `${index * 0.08}s`,
               }}
@@ -308,6 +312,7 @@ function Events() {
           </div>
         )}
       </div>
+
 
     </div>
   );
