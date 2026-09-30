@@ -19,7 +19,7 @@ const ORBIT_NODES = [
   { label: "Practice", short: "Practice", emoji: "💪", angle: 120 }, { label: "Projects", short: "Projects", emoji: "🚀", angle: 180 },
   { label: "Skills", short: "Skills", emoji: "⚡", angle: 240 }, { label: "Career", short: "Career", emoji: "📈", angle: 300 }
 ];
-const ORBIT_CYCLE_DURATION = 8000;
+const ORBIT_CYCLE_DURATION = 8000; // 8.2 seconds for a full orbit
 
 function AboutOrbitAnimation() {
   const [progress, setProgress] = useState(0);
@@ -64,7 +64,7 @@ function AboutOrbitAnimation() {
   const headAngleRad = (-90 + progress * 360) * (Math.PI / 180);
   const headX = Math.cos(headAngleRad) * radius, headY = Math.sin(headAngleRad) * radius;
   const trailDots = [0.022, 0.045].map((offset) => {
-    const angle = (-90 + ((progress - offset + 1) % 1) * 360) * (Math.PI / 180);
+  const angle = (-90 + ((progress - offset + 1) % 1) * 360) * (Math.PI / 180);
     return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius };
   });
 

@@ -20,8 +20,7 @@ import Organization from "./modules/marketing/presentation/pages/Contact/Contact
 import Cart from "./modules/marketing/presentation/pages/Cart/Cart";
 import CourseDetail from "./modules/marketing/presentation/pages/CourseDetails/CourseDetails";
 import Login from "./modules/marketing/presentation/components/Login/Login";
-import Events from "./modules/marketing/presentation/pages/Events/Events.jsx";
-import RegistrationForm from "./modules/marketing/presentation/components/HackathonRegistration/HackathonRegistration/RegistrationForm";
+import RegistrationForm from "./modules/marketing/presentation/components/HackathonRegistration/RegistrationForm";
 
 // Add this import only when Checkout.jsx exists
 // import Checkout from "./modules/marketing/presentation/pages/Checkout/Checkout";
