@@ -17,7 +17,7 @@ import Training from "../../components/assets/traning.png";
 import Internships from "../../components/assets/traning.png";
 import Opportunities from "../../components/assets/traning.png";
 import learner from "../../components/assets/contact-students.png"
-import Events from "../../pages/Events/Events";
+
 
 const organizationPoints = [
     "Branded Learning Platforms",

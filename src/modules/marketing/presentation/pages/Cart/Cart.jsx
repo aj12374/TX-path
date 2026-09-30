@@ -7,35 +7,25 @@ function Cart() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    const savedCart = JSON.parse(
-      localStorage.getItem("cart") || "[]"
-    );
+    const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
     setCart(savedCart);
   }, []);
 
   const removeFromCart = (courseId) => {
-    const updatedCart = cart.filter(
-      (course) => course.id !== courseId
-    );
-
+    const updatedCart = cart.filter((course) => course.id !== courseId);
     setCart(updatedCart);
 
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(updatedCart)
-    );
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   const getPrice = (price) => {
-    return Number(
-      price.replace("₹", "").replace(/,/g, "")
-    );
+    return Number(price.replace("₹", "").replace(/,/g, ""));
   };
 
   const totalPrice = cart.reduce(
     (total, course) => total + getPrice(course.price),
-    0
+    0,
   );
 
   if (cart.length === 0) {
@@ -46,9 +36,7 @@ function Cart() {
 
           <h1>Your cart is empty</h1>
 
-          <p>
-            Add a course from the marketplace to continue.
-          </p>
+          <p>Add a course from the marketplace to continue.</p>
 
           <button
             type="button"
@@ -65,35 +53,24 @@ function Cart() {
   return (
     <div className="cart-page">
       <div className="cart-container">
-
         <div className="cart-header">
           <div>
-            <span className="cart-label">
-              YOUR SELECTION
-            </span>
+            <span className="cart-label">YOUR SELECTION</span>
 
             <h1>Your Cart</h1>
 
             <p>
-              {cart.length}{" "}
-              {cart.length === 1 ? "course" : "courses"}{" "}
-              added to your cart
+              {cart.length} {cart.length === 1 ? "course" : "courses"} added to
+              your cart
             </p>
           </div>
         </div>
 
         <div className="cart-layout">
-
           <div className="cart-items">
             {cart.map((course) => (
-              <article
-                key={course.id}
-                className="cart-course-card"
-              >
-
-
+              <article key={course.id} className="cart-course-card">
                 <div className="cart-course-details">
-
                   <span className="cart-course-category">
                     {course.category}
                   </span>
@@ -117,38 +94,26 @@ function Cart() {
                   </div>
 
                   <div className="cart-course-price">
+                    <span className="cart-current-price">{course.price}</span>
 
-                    <span className="cart-current-price">
-                      {course.price}
-                    </span>
-
-                    {course.oldPrice &&
-                      course.oldPrice !== "₹0" && (
-                        <del>
-                          {course.oldPrice}
-                        </del>
-                      )}
-
+                    {course.oldPrice && course.oldPrice !== "₹0" && (
+                      <del>{course.oldPrice}</del>
+                    )}
                   </div>
-
                 </div>
 
                 <button
                   type="button"
                   className="remove-cart-button"
-                  onClick={() =>
-                    removeFromCart(course.id)
-                  }
+                  onClick={() => removeFromCart(course.id)}
                 >
                   Remove
                 </button>
-
               </article>
             ))}
           </div>
 
           <aside className="cart-summary">
-
             <h2>Order Summary</h2>
 
             <div className="summary-row">
@@ -160,9 +125,7 @@ function Cart() {
             <div className="summary-row">
               <span>Subtotal</span>
 
-              <span>
-                ₹{totalPrice.toLocaleString("en-IN")}
-              </span>
+              <span>₹{totalPrice.toLocaleString("en-IN")}</span>
             </div>
 
             <div className="summary-divider" />
@@ -170,32 +133,22 @@ function Cart() {
             <div className="summary-total">
               <span>Total</span>
 
-              <strong>
-                ₹{totalPrice.toLocaleString("en-IN")}
-              </strong>
+              <strong>₹{totalPrice.toLocaleString("en-IN")}</strong>
             </div>
 
-            <button
-              type="button"
-              className="checkout-button"
-            >
+            <button type="button" className="checkout-button">
               Proceed to Checkout
             </button>
 
             <button
               type="button"
               className="continue-shopping-button"
-              onClick={() =>
-                navigate("/marketplace")
-              }
+              onClick={() => navigate("/marketplace")}
             >
               Continue Shopping
             </button>
-
           </aside>
-
         </div>
-
       </div>
     </div>
   );

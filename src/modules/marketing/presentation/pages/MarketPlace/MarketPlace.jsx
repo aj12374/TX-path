@@ -14,7 +14,6 @@ export default function Marketplace() {
   const [activeLevel, setActiveLevel] = useState("All levels");
   const [activePrice, setActivePrice] = useState("All");
 
-  // Login popup state
   const [loginOpen, setLoginOpen] = useState(false);
   const [redirectTo, setRedirectTo] = useState("/");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,7 +38,7 @@ export default function Marketplace() {
       if (
         selectedCategory !== "All" &&
         course.category !== selectedCategory
-      ) {
+      ){
         return false;
       }
 
@@ -67,6 +66,7 @@ export default function Marketplace() {
       return true;
     });
   }, [activeCategory, activeLevel, activePrice]);
+
 
   const handleCourseClick = (course) => {
     const coursePath = `/course/${course.id.toLowerCase()}`;
