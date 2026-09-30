@@ -12,7 +12,7 @@ import Footer from "./modules/marketing/presentation/components/Footer/Footer";
 import Home from "./modules/marketing/presentation/pages/Home/Home";
 import LearnerJourney from "./modules/marketing/presentation/pages/Learner_journey/Learner_journey";
 import About from "./modules/marketing/presentation/pages/About/About";
-import Events from "./modules/marketing/presentation/pages/Events/Events";
+
 import Marketplace from "./modules/marketing/presentation/pages/MarketPlace/MarketPlace";
 import Blog from "./modules/marketing/presentation/pages/Blog/Blog";
 import CareersHero from "./modules/marketing/presentation/pages/Careers/Careers";
