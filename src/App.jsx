@@ -20,6 +20,7 @@ import Organization from "./modules/marketing/presentation/pages/Contact/Contact
 import Cart from "./modules/marketing/presentation/pages/Cart/Cart";
 import CourseDetail from "./modules/marketing/presentation/pages/CourseDetails/CourseDetails";
 import Login from "./modules/marketing/presentation/components/Login/Login";
+import RegistrationForm from "./modules/marketing/presentation/components/HackathonRegistration/HackathonRegistration/RegistrationForm";
 
 // Add this import only when Checkout.jsx exists
 // import Checkout from "./modules/marketing/presentation/pages/Checkout/Checkout";
@@ -61,6 +62,8 @@ function AppLayout() {
         <Route path="/login" element={<Login />} />
         <Route path="/cart" element={<Cart/>} />
         <Route path="/contact" element={<Organization />} />
+
+        <Route path="/registration" element={<RegistrationForm />} />
 
         {/* Checkout - enable when Checkout.jsx exists */}
         {/* 

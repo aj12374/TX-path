@@ -4,6 +4,7 @@ import hackathonimg2 from "../../../../../assets/Hackathon_2.jpg";
 import bootcampImg from "../../../../../assets/bootcamp_3d_illustration.png";
 import workshopImg from "../../../../../assets/workshop_lightbulb_idea.png";
 import "./Events.css";
+import { useNavigate } from "react-router-dom";
 
 const events = [
   {
@@ -123,6 +124,7 @@ const events = [
 export default function Events() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [modeFilter, setModeFilter] = useState(null);
+  const navigate = useNavigate();
 
   const filteredEvents = events.filter((event) => {
     const matchesType = typeFilter === "all" || event.type === typeFilter;
@@ -194,64 +196,67 @@ export default function Events() {
         </button>
       </div>
 
-      
-        <div className="event-list">
-          {filteredEvents.length > 0 ? (
-            filteredEvents.map((event, index) => (
-              <div
-                key={event.id}
-                className="event-card"
-                style={{
-                  animationDelay: `${index * 0.08}s`,
-                }}
-              >
-                <div className="event-image">
-                  <img src={event.img} alt={event.title} />
 
-                  <div className="event-type">
-                    {event.badge}
-                  </div>
+      <div className="event-list">
+        {filteredEvents.length > 0 ? (
+          filteredEvents.map((event, index) => (
+            <div
+              key={event.id}
+              className="event-card"
+              style={{
+                animationDelay: `${index * 0.08}s`,
+              }}
+            >
+              <div className="event-image">
+                <img src={event.img} alt={event.title} />
 
-                  <div className="event-date">
-                    {event.date}
-                  </div>
+                <div className="event-type">
+                  {event.badge}
                 </div>
 
-                <div className="event-details">
-                  <h3>{event.title}</h3>
-
-                  <p className="event-description">
-                    {event.desc}
-                  </p>
-
-                  <div className="event-info">
-                    {event.meta}
-                  </div>
-
-                  <div className="event-stats">
-                    <span>{event.s1}</span>
-                    <span>{event.s2}</span>
-                  </div>
-
-                  <button className="event-action">
-                    {event.btn}
-                  </button>
+                <div className="event-date">
+                  {event.date}
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="event-box">
+
+              <div className="event-details">
+                <h3>{event.title}</h3>
+
+                <p className="event-description">
+                  {event.desc}
+                </p>
+
+                <div className="event-info">
+                  {event.meta}
+                </div>
+
+                <div className="event-stats">
+                  <span>{event.s1}</span>
+                  <span>{event.s2}</span>
+                </div>
+
+                <button
+                  className="event-action"
+                  onClick={() => navigate("/registration")}
+                >
+                  {event.btn}
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="event-box">
             <div className="no-events">
               <h3>No events found</h3>
               <p>
                 There are currently no events available in this category.
               </p>
             </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
 
-    
+
     </div>
   );
 }
