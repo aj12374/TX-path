@@ -1,5 +1,4 @@
-import React from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import ProgressBar from "./RegistrationCards/ProgressBar";
 import RegistrationType from "./RegistrationCards/RegistrationType";
 import TeamLeadDetails from "./RegistrationCards/TeamLeadDetails";
@@ -14,6 +13,8 @@ import Declaration from "./RegistrationCards/Declaration";
 import ReviewSubmit from "./RegistrationCards/ReviewSubmit";
 import Success from "./RegistrationCards/Success";
 import "./RegistrationForm.css";
+
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPW-Nr_WYkM9ehgMwJHs_N4lko-WhVZwhfFuvBtJZH8mDDaBjS4ajaEOseGRfs-secIA/exec";
 
 const steps = [
   { key: "type", label: "Registration Type" },
@@ -47,6 +48,9 @@ export default function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState([]);
   const [registrationId, setRegistrationId] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const submissionLock = useRef(false);
 
   const visibleSteps = useMemo(() => {
     if (data.participantType === "individual") {
@@ -78,11 +82,45 @@ export default function RegistrationForm() {
     }
   };
 
-  const submit = () => {
-    const id = `TX-REG-${Math.floor(1000 + Math.random() * 9000)}`;
-    setRegistrationId(id);
-    setCompletedSteps(prev => [...new Set([...prev, stepIndex])]);
-    setCurrentStep(visibleSteps.length);
+  const submit = async () => {
+    if (submissionLock.current) return;
+
+    submissionLock.current = true;
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(data)
+      });
+      let result;
+      try {
+        result = await response.json();
+      } catch {
+        throw new Error("The registration service returned an invalid response. Verify its Web App deployment and try again.");
+      }
+
+      if (!response.ok || !result?.success) {
+        throw new Error(result?.message || "Registration could not be saved.");
+      }
+
+      const id = `TX-REG-${Math.floor(1000 + Math.random() * 9000)}`;
+      setRegistrationId(id);
+      setData(initialData);
+      setCompletedSteps(prev => [...new Set([...prev, stepIndex])]);
+      setCurrentStep(visibleSteps.length);
+    } catch (error) {
+      setSubmitError(error instanceof TypeError
+        ? "Unable to reach the registration service. Check your connection and Apps Script Web App deployment, then try again."
+        : error.message || "Registration could not be saved. Please try again.");
+    } finally {
+      submissionLock.current = false;
+      setIsSubmitting(false);
+    }
   };
 
   const restart = () => {
@@ -90,6 +128,7 @@ export default function RegistrationForm() {
     setCurrentStep(0);
     setCompletedSteps([]);
     setRegistrationId("");
+    setSubmitError("");
   };
 
   const edit = index => setCurrentStep(index);
@@ -130,7 +169,7 @@ export default function RegistrationForm() {
         content = <Declaration data={data.declaration} update={values => updateSection("declaration", values)} onNext={markCompleteAndNext} onBack={goBack} />;
         break;
       case "review":
-        content = <ReviewSubmit data={data} sectionIndexes={sectionIndexes} onBack={goBack} onSubmit={submit} onEdit={edit} />;
+        content = <ReviewSubmit data={data} sectionIndexes={sectionIndexes} onBack={goBack} onSubmit={submit} onEdit={edit} isSubmitting={isSubmitting} submitError={submitError} />;
         break;
       default:
         content = null;
