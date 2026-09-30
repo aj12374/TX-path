@@ -1,4 +1,3 @@
-import React from "react";
 import FormCard from "./FormCard";
 
 function value(value) {
@@ -12,7 +11,7 @@ function Row({ label, value: item }) {
   return <div className="reviewRow"><span>{label}</span><strong>{value(item)}</strong></div>;
 }
 
-export default function ReviewSubmit({ data, sectionIndexes, onBack, onSubmit, onEdit }) {
+export default function ReviewSubmit({ data, sectionIndexes, onBack, onSubmit, onEdit, isSubmitting, submitError }) {
   return (
     <FormCard title="Review & Submit" description="Every section below shows the information currently entered in the form.">
       <div className="reviewSection">
@@ -90,9 +89,12 @@ export default function ReviewSubmit({ data, sectionIndexes, onBack, onSubmit, o
       ))}
 
       <div className="notice">Please verify all entered information before submitting. After submission, the registration is ready for organizer verification and eligibility review.</div>
+      {submitError && <div className="formErrorMessage" role="alert">{submitError}</div>}
       <div className="formActions">
-        <button className="button secondary" onClick={onBack}>← Back</button>
-        <button className="button primary" onClick={onSubmit}>Submit Registration ✓</button>
+        <button className="button secondary" onClick={onBack} disabled={isSubmitting}>← Back</button>
+        <button className="button primary" onClick={onSubmit} disabled={isSubmitting} aria-busy={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit Registration ✓"}
+        </button>
       </div>
     </FormCard>
   );
