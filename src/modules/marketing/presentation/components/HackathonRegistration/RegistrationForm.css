@@ -98,7 +98,6 @@ button { cursor: pointer; }
 .field.full { grid-column: 1 / -1; }
 .field label { color: #465066; font-size: 12px; font-weight: 800; }
 .field input, .field select, .field textarea {
-  
   border: 1px solid var(--line);
   border-radius: 11px;
   background: #fbfcfe;

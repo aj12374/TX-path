@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import FormCard from "./FormCard";
+import { validateAlphaOnly, validateDateNotPast } from "../validationHelpers";
 
 export default function Declaration({ data, update, onNext, onBack }) {
   const [errors, setErrors] = useState({});
   const [attempted, setAttempted] = useState(false);
+
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`;
 
   const validate = () => {
     const errs = {};
@@ -16,11 +23,13 @@ export default function Declaration({ data, update, onNext, onBack }) {
     if (!data.consent) {
       errs.consent = "Please select your event documentation consent.";
     }
-    if (!data.name?.trim()) {
-      errs.name = "Participant / Team Leader Name is required.";
+    const nameErr = validateAlphaOnly(data.name, "Participant / Team Leader Name");
+    if (nameErr) {
+      errs.name = nameErr;
     }
-    if (!data.date?.trim()) {
-      errs.date = "Date is required.";
+    const dateErr = validateDateNotPast(data.date, "Date");
+    if (dateErr) {
+      errs.date = dateErr;
     }
     if (!data.place?.trim()) {
       errs.place = "Place is required.";
@@ -32,7 +41,11 @@ export default function Declaration({ data, update, onNext, onBack }) {
   };
 
   const handleChange = (key, value) => {
-    update({ [key]: value });
+    let finalValue = value;
+    if (key === "name") {
+      finalValue = value.replace(/[^a-zA-Z\s.\-']/g, "");
+    }
+    update({ [key]: finalValue });
     if (errors[key]) {
       setErrors(prev => ({ ...prev, [key]: "" }));
     }
@@ -113,11 +126,13 @@ export default function Declaration({ data, update, onNext, onBack }) {
           ["signature", "Signature *", "Signature / Full Name"]
         ].map(([key, label, placeholder]) => {
           const fieldError = errors[key];
+          const isDate = key === "date";
           return (
             <div className={`field ${fieldError ? "hasError" : ""}`} key={key}>
               <label>{label}</label>
               <input
-                type={key === "date" ? "date" : "text"}
+                type={isDate ? "date" : "text"}
+                min={isDate ? todayStr : undefined}
                 value={data[key] || ""}
                 placeholder={placeholder}
                 onChange={e => handleChange(key, e.target.value)}

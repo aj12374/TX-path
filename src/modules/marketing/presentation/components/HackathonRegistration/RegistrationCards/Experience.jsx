@@ -11,8 +11,8 @@ export default function Experience({ data, update, onNext, onBack }) {
     if (!data.hackathonBefore) {
       errs.hackathonBefore = "Please select Yes or No.";
     }
-    if (data.hackathonBefore === "Yes" && (data.hackathonCount === undefined || data.hackathonCount === "")) {
-      errs.hackathonCount = "Please enter number of hackathons participated.";
+    if (data.hackathonBefore === "Yes" && (!data.hackathonCount || Number(data.hackathonCount) < 1)) {
+      errs.hackathonCount = "Please enter number of hackathons (at least 1).";
     }
     if (!data.developedProjects) {
       errs.developedProjects = "Please select Yes or No.";
@@ -28,6 +28,28 @@ export default function Experience({ data, update, onNext, onBack }) {
     update({ [key]: value });
     if (errors[key]) {
       setErrors(prev => ({ ...prev, [key]: "" }));
+    }
+  };
+
+  const handleHackathonBeforeChange = (val) => {
+    if (val === "Yes") {
+      update({
+        hackathonBefore: "Yes",
+        hackathonCount: (!data.hackathonCount || Number(data.hackathonCount) < 1) ? 1 : data.hackathonCount
+      });
+    } else if (val === "No") {
+      update({
+        hackathonBefore: "No",
+        hackathonCount: 0
+      });
+    } else {
+      update({
+        hackathonBefore: "",
+        hackathonCount: ""
+      });
+    }
+    if (errors.hackathonBefore || errors.hackathonCount) {
+      setErrors(prev => ({ ...prev, hackathonBefore: "", hackathonCount: "" }));
     }
   };
 
@@ -55,7 +77,7 @@ export default function Experience({ data, update, onNext, onBack }) {
           <label>Participated in a Hackathon Before? *</label>
           <select
             value={data.hackathonBefore || ""}
-            onChange={e => handleChange("hackathonBefore", e.target.value)}
+            onChange={e => handleHackathonBeforeChange(e.target.value)}
           >
             <option value="">Select Option</option>
             <option value="Yes">Yes</option>
@@ -64,17 +86,22 @@ export default function Experience({ data, update, onNext, onBack }) {
           {errors.hackathonBefore && <span className="errorText">⚠️ {errors.hackathonBefore}</span>}
         </div>
 
-        <div className={`field ${errors.hackathonCount ? "hasError" : ""}`}>
-          <label>Number of Hackathons Participated {data.hackathonBefore === "Yes" ? "*" : ""}</label>
-          <input
-            type="number"
-            min="0"
-            value={data.hackathonCount || ""}
-            placeholder="0"
-            onChange={e => handleChange("hackathonCount", e.target.value)}
-          />
-          {errors.hackathonCount && <span className="errorText">⚠️ {errors.hackathonCount}</span>}
-        </div>
+        {data.hackathonBefore === "Yes" && (
+          <div className={`field ${errors.hackathonCount ? "hasError" : ""}`}>
+            <label>Number of Hackathons Participated *</label>
+            <input
+              type="number"
+              min="1"
+              value={data.hackathonCount ?? 1}
+              placeholder="1"
+              onChange={e => {
+                const val = Math.max(1, parseInt(e.target.value) || 1);
+                handleChange("hackathonCount", val);
+              }}
+            />
+            {errors.hackathonCount && <span className="errorText">⚠️ {errors.hackathonCount}</span>}
+          </div>
+        )}
 
         <div className="field full">
           <label>Previous Hackathon / Project Experience</label>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FormCard from "./FormCard";
-import { validateEmail, validateMobile } from "../validationHelpers";
+import { validateEmail, validateMobile, validateAlphaOnly } from "../validationHelpers";
 
 export default function Institution({ data, update, onNext, onBack }) {
   const [errors, setErrors] = useState({});
@@ -8,9 +8,15 @@ export default function Institution({ data, update, onNext, onBack }) {
 
   const validate = () => {
     const errs = {};
-    if (!data.coordinatorName?.trim()) errs.coordinatorName = "Faculty Coordinator Name is required.";
-    if (!data.designation?.trim()) errs.designation = "Designation is required.";
-    if (!data.department?.trim()) errs.department = "Department is required.";
+    
+    const coordErr = validateAlphaOnly(data.coordinatorName, "Faculty Coordinator Name");
+    if (coordErr) errs.coordinatorName = coordErr;
+
+    const desigErr = validateAlphaOnly(data.designation, "Designation");
+    if (desigErr) errs.designation = desigErr;
+
+    const deptErr = validateAlphaOnly(data.department, "Department");
+    if (deptErr) errs.department = deptErr;
     
     const emailErr = validateEmail(data.officialEmail);
     if (emailErr) errs.officialEmail = emailErr;
@@ -24,7 +30,13 @@ export default function Institution({ data, update, onNext, onBack }) {
   };
 
   const handleChange = (key, value) => {
-    update({ [key]: value });
+    let finalValue = value;
+    if (key === "contactNumber") {
+      finalValue = value.replace(/\D/g, "").slice(0, 10);
+    } else if (["coordinatorName", "designation", "department"].includes(key)) {
+      finalValue = value.replace(/[^a-zA-Z\s.\-']/g, "");
+    }
+    update({ [key]: finalValue });
     if (errors[key]) {
       setErrors(prev => ({ ...prev, [key]: "" }));
     }
@@ -58,11 +70,15 @@ export default function Institution({ data, update, onNext, onBack }) {
           ["contactNumber", "Contact Number *", "10-digit contact number"]
         ].map(([key, label, placeholder]) => {
           const fieldError = errors[key];
+          const isTel = key === "contactNumber";
           return (
-            <div className={`field ${fieldError ? "hasError" : ""}`} key={key}>
+            <div className={`field ${fieldError ? "hasError" : ""} ${isTel ? "full" : ""}`} key={key}>
               <label>{label}</label>
               <input
-                type={key.includes("Email") ? "email" : key.includes("Number") ? "tel" : "text"}
+                type={key.includes("Email") ? "email" : isTel ? "tel" : "text"}
+                inputMode={isTel ? "numeric" : undefined}
+                pattern={isTel ? "[0-9]*" : undefined}
+                maxLength={isTel ? 10 : undefined}
                 value={data[key] || ""}
                 placeholder={placeholder}
                 onChange={e => handleChange(key, e.target.value)}
@@ -76,7 +92,7 @@ export default function Institution({ data, update, onNext, onBack }) {
       <div className={`notice ${errors.approval ? "warning" : ""}`}>
         <strong>Institutional Approval / Recommendation: *</strong>
         <div className="inlineOptions">
-          {["Yes", "No", "Not Applicable"].map(option => (
+          {["Yes", "No"].map(option => (
             <label key={option}>
               <input
                 type="radio"
