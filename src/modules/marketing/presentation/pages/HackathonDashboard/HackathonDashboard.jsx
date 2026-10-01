@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -56,6 +57,7 @@ const navItems = [
 const HackathonDashboard = () => {
   const [active, setActive] = useState("dashboard");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="hackathon-dashboard-wrapper">
@@ -156,7 +158,9 @@ const HackathonDashboard = () => {
 
             </div>
 
-            <button className="hd-logout-btn">
+            <button className="hd-logout-btn"
+            onClick={() => navigate("/")}
+            >
               <LogOut size={16} />
             </button>
 
