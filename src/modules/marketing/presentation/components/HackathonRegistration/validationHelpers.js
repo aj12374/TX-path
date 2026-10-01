@@ -30,3 +30,37 @@ export const validateUrl = (url, label = "URL") => {
   if (!urlRegex.test(url.trim())) return `Enter a valid ${label} (e.g. https://github.com/username)`;
   return "";
 };
+
+export const validateAlphaOnly = (val, label) => {
+  if (!val || (typeof val === "string" && !val.trim())) return `${label} is required`;
+  if (/[0-9]/.test(val)) return `${label} must contain letters only (numbers are not allowed)`;
+  const alphaRegex = /^[A-Za-z\s.\-']+$/;
+  if (!alphaRegex.test(val.trim())) return `${label} must contain valid alphabetic characters only`;
+  return "";
+};
+
+export const validateDateNotPast = (dateStr, label = "Date") => {
+  if (!dateStr || !dateStr.trim()) return `${label} is required`;
+  // Get local date string YYYY-MM-DD
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+
+  if (dateStr < todayStr) return `${label} cannot be a past date (select today or a future date)`;
+  return "";
+};
+
+export const validateDateNotFuture = (dateStr, label = "Date") => {
+  if (!dateStr || !dateStr.trim()) return `${label} is required`;
+  // Get local date string YYYY-MM-DD
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+
+  if (dateStr > todayStr) return `${label} cannot be a future date (select today or a past date)`;
+  return "";
+};

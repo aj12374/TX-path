@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FormCard from "./FormCard";
-import { validateEmail, validateMobile, validateOptionalMobile } from "../validationHelpers";
+import { validateEmail, validateMobile, validateOptionalMobile, validateAlphaOnly, validateDateNotFuture } from "../validationHelpers";
 
 const fields = [
   ["fullName", "Full Name", "text", "Full name"],
@@ -20,11 +20,22 @@ export default function StudentDetails({ data, update, onNext, onBack }) {
   const [errors, setErrors] = useState({});
   const [attempted, setAttempted] = useState(false);
 
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+
   const validate = () => {
     const errs = {};
-    if (!data.fullName?.trim()) errs.fullName = "Full name is required";
+    
+    const nameErr = validateAlphaOnly(data.fullName, "Full Name");
+    if (nameErr) errs.fullName = nameErr;
+
     if (!data.gender?.trim()) errs.gender = "Please select gender";
-    if (!data.dateOfBirth?.trim()) errs.dateOfBirth = "Date of birth is required";
+    
+    const dateErr = validateDateNotFuture(data.dateOfBirth, "Date of Birth");
+    if (dateErr) errs.dateOfBirth = dateErr;
     
     const mobileErr = validateMobile(data.mobile, "Mobile number");
     if (mobileErr) errs.mobile = mobileErr;
@@ -35,9 +46,15 @@ export default function StudentDetails({ data, update, onNext, onBack }) {
     const emailErr = validateEmail(data.email);
     if (emailErr) errs.email = emailErr;
 
-    if (!data.college?.trim()) errs.college = "College / University is required";
-    if (!data.department?.trim()) errs.department = "Department is required";
-    if (!data.course?.trim()) errs.course = "Course / Program is required";
+    const collegeErr = validateAlphaOnly(data.college, "College / University");
+    if (collegeErr) errs.college = collegeErr;
+
+    const deptErr = validateAlphaOnly(data.department, "Department");
+    if (deptErr) errs.department = deptErr;
+
+    const courseErr = validateAlphaOnly(data.course, "Course / Program");
+    if (courseErr) errs.course = courseErr;
+
     if (!data.year?.trim()) errs.year = "Please select year of study";
     if (!data.studentId?.trim()) errs.studentId = "Student ID / Roll Number is required";
 
@@ -45,7 +62,13 @@ export default function StudentDetails({ data, update, onNext, onBack }) {
   };
 
   const handleChange = (key, value) => {
-    update({ [key]: value });
+    let finalValue = value;
+    if (key === "mobile" || key === "alternateContact") {
+      finalValue = value.replace(/\D/g, "").slice(0, 10);
+    } else if (["fullName", "college", "department", "course"].includes(key)) {
+      finalValue = value.replace(/[^a-zA-Z\s.\-']/g, "");
+    }
+    update({ [key]: finalValue });
     if (errors[key]) {
       setErrors(prev => ({ ...prev, [key]: "" }));
     }
@@ -73,6 +96,8 @@ export default function StudentDetails({ data, update, onNext, onBack }) {
       <div className="formGrid">
         {fields.map(([key, label, type, placeholder, options]) => {
           const fieldError = errors[key];
+          const isTel = type === "tel";
+          const isDate = type === "date";
           return (
             <div className={`field ${fieldError ? "hasError" : ""}`} key={key}>
               <label>{label} *</label>
@@ -89,6 +114,10 @@ export default function StudentDetails({ data, update, onNext, onBack }) {
               ) : (
                 <input
                   type={type}
+                  inputMode={isTel ? "numeric" : undefined}
+                  pattern={isTel ? "[0-9]*" : undefined}
+                  maxLength={isTel ? 10 : undefined}
+                  max={isDate ? todayStr : undefined}
                   value={data[key] || ""}
                   placeholder={placeholder}
                   onChange={e => handleChange(key, e.target.value)}

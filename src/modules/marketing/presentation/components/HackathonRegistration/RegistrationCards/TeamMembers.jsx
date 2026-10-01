@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FormCard from "./FormCard";
-import { validateEmail, validateMobile, validateOptionalMobile } from "../validationHelpers";
+import { validateEmail, validateMobile, validateOptionalMobile, validateAlphaOnly } from "../validationHelpers";
 
 const blankMember = () => ({
   name: "",
@@ -24,7 +24,8 @@ export default function TeamMembers({ data, update, onNext, onBack }) {
   const validate = () => {
     const errs = {};
     members.forEach((m, index) => {
-      if (!m.name?.trim()) errs[`${index}_name`] = "Name is required";
+      const nameErr = validateAlphaOnly(m.name, "Name");
+      if (nameErr) errs[`${index}_name`] = nameErr;
       
       const emailErr = validateEmail(m.email);
       if (emailErr) errs[`${index}_email`] = emailErr;
@@ -35,8 +36,12 @@ export default function TeamMembers({ data, update, onNext, onBack }) {
       const altErr = validateOptionalMobile(m.alternateContact, "Alternate contact");
       if (altErr) errs[`${index}_alternateContact`] = altErr;
 
-      if (!m.college?.trim()) errs[`${index}_college`] = "College is required";
-      if (!m.department?.trim()) errs[`${index}_department`] = "Department is required";
+      const collegeErr = validateAlphaOnly(m.college, "College");
+      if (collegeErr) errs[`${index}_college`] = collegeErr;
+
+      const deptErr = validateAlphaOnly(m.department, "Department");
+      if (deptErr) errs[`${index}_department`] = deptErr;
+
       if (!m.year?.trim()) errs[`${index}_year`] = "Year is required";
       if (!m.studentId?.trim()) errs[`${index}_studentId`] = "Student ID is required";
       if (!m.skills?.trim()) errs[`${index}_skills`] = "Primary skills are required";
@@ -45,7 +50,13 @@ export default function TeamMembers({ data, update, onNext, onBack }) {
   };
 
   const updateMember = (index, key, value) => {
-    const next = members.map((member, i) => i === index ? { ...member, [key]: value } : member);
+    let finalValue = value;
+    if (key === "mobile" || key === "alternateContact") {
+      finalValue = value.replace(/\D/g, "").slice(0, 10);
+    } else if (["name", "college", "department"].includes(key)) {
+      finalValue = value.replace(/[^a-zA-Z\s.\-']/g, "");
+    }
+    const next = members.map((member, i) => i === index ? { ...member, [key]: finalValue } : member);
     setMembers(next);
 
     const errKey = `${index}_${key}`;
@@ -108,6 +119,7 @@ export default function TeamMembers({ data, update, onNext, onBack }) {
             ].map(([key, label, type, placeholder, options]) => {
               const errKey = `${index}_${key}`;
               const fieldError = errors[errKey];
+              const isTel = type === "tel";
               return (
                 <div className={`field ${fieldError ? "hasError" : ""}`} key={key}>
                   <label>{label}</label>
@@ -124,6 +136,9 @@ export default function TeamMembers({ data, update, onNext, onBack }) {
                   ) : (
                     <input
                       type={type}
+                      inputMode={isTel ? "numeric" : undefined}
+                      pattern={isTel ? "[0-9]*" : undefined}
+                      maxLength={isTel ? 10 : undefined}
                       value={member[key] || ""}
                       placeholder={placeholder}
                       onChange={e => updateMember(index, key, e.target.value)}
