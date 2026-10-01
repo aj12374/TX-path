@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Round1 from "./Round1";
 import {
   LayoutDashboard,
   Users,
@@ -60,14 +61,12 @@ const HackathonDashboard = () => {
   return (
     <div className="hackathon-dashboard-wrapper">
 
-      {/* SIDEBAR */}
       <aside
         className={`hd-sidebar ${
           mobileOpen ? "hd-sidebar-open" : ""
         }`}
       >
 
-        {/* SIDEBAR HEADER */}
         <div className="hd-sidebar-header">
 
           <div className="hd-logo">
@@ -93,7 +92,6 @@ const HackathonDashboard = () => {
 
         </div>
 
-        {/* NAVIGATION */}
         <nav className="hd-nav">
 
           {navItems.map((item) => {
@@ -135,7 +133,6 @@ const HackathonDashboard = () => {
 
         </nav>
 
-        {/* USER CARD */}
         <div className="hd-sidebar-footer">
 
           <div className="hd-user-card">
@@ -166,10 +163,8 @@ const HackathonDashboard = () => {
 
       </aside>
 
-      {/* MAIN */}
       <div className="hd-main">
 
-        {/* MOBILE TOPBAR */}
         <div className="hd-mobile-topbar">
 
           <button
@@ -185,58 +180,59 @@ const HackathonDashboard = () => {
 
         </div>
 
-        {/* CONTENT */}
-
-        {active === "dashboard" ? (
-
+        {active === "dashboard" && (
           <div className="hd-content">
             <Overview />
           </div>
+        )}
 
-        ) : (
+        {active === "round1" && (
+          <div className="hd-content">
+            <Round1 />
+          </div>
+        )}
 
-          <div className="hd-empty-wrapper">
+        {active !== "dashboard" &&
+          active !== "round1" && (
+            <div className="hd-empty-wrapper">
 
-            <div className="hd-empty-box">
+              <div className="hd-empty-box">
 
-              <div className="hd-empty-icon">
+                <div className="hd-empty-icon">
 
-                {(() => {
+                  {(() => {
 
-                  const ActiveIcon =
-                    navItems.find(
-                      (item) => item.id === active
-                    )?.icon;
+                    const ActiveIcon =
+                      navItems.find(
+                        (item) => item.id === active
+                      )?.icon;
 
-                  return ActiveIcon ? (
-                    <ActiveIcon size={32} />
-                  ) : null;
+                    return ActiveIcon ? (
+                      <ActiveIcon size={32} />
+                    ) : null;
 
-                })()}
+                  })()}
 
-              </div>
+                </div>
 
-              <h2 className="hd-empty-title">
-                {active}
-              </h2>
+                <h2 className="hd-empty-title">
+                  {active}
+                </h2>
 
-              <p className="hd-empty-text">
-                Empty screen - {active} page content will go here
-              </p>
+                <p className="hd-empty-text">
+                  Empty screen - {active} page content will go here
+                </p>
 
-              <div className="hd-empty-tag">
-                Left sidebar navigation working
+                <div className="hd-empty-tag">
+                  Left sidebar navigation working
+                </div>
+
               </div>
 
             </div>
-
-          </div>
-
-        )}
+          )}
 
       </div>
-
-      {/* MOBILE OVERLAY */}
 
       {mobileOpen && (
         <div
