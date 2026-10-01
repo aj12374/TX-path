@@ -13,6 +13,7 @@ import {
   X
 } from "lucide-react";
 import Overview from "./Overview";
+import Teams from "./Teams";
 import "./HackathonDashboard.css";
 
 const navItems = [
@@ -64,9 +65,8 @@ const HackathonDashboard = () => {
 
       {/* SIDEBAR */}
       <aside
-        className={`hd-sidebar ${
-          mobileOpen ? "hd-sidebar-open" : ""
-        }`}
+        className={`hd-sidebar ${mobileOpen ? "hd-sidebar-open" : ""
+          }`}
       >
 
         {/* SIDEBAR HEADER */}
@@ -110,9 +110,8 @@ const HackathonDashboard = () => {
                   setActive(item.id);
                   setMobileOpen(false);
                 }}
-                className={`hd-nav-item ${
-                  isActive ? "hd-nav-active" : ""
-                }`}
+                className={`hd-nav-item ${isActive ? "hd-nav-active" : ""
+                  }`}
               >
 
                 <Icon className="hd-nav-icon" />
@@ -123,9 +122,8 @@ const HackathonDashboard = () => {
 
                 {item.badge && (
                   <span
-                    className={`hd-badge hd-badge-${item.color} ${
-                      isActive ? "hd-badge-active" : ""
-                    }`}
+                    className={`hd-badge hd-badge-${item.color} ${isActive ? "hd-badge-active" : ""
+                      }`}
                   >
                     {item.badge}
                   </span>
@@ -159,7 +157,7 @@ const HackathonDashboard = () => {
             </div>
 
             <button className="hd-logout-btn"
-            onClick={() => navigate("/")}
+              onClick={() => navigate("/")}
             >
               <LogOut size={16} />
             </button>
@@ -195,6 +193,12 @@ const HackathonDashboard = () => {
 
           <div className="hd-content">
             <Overview />
+          </div>
+
+        ) : active === "teams" ? (
+
+          <div className="hd-content">
+            <Teams />
           </div>
 
         ) : (
