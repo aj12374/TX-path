@@ -59,14 +59,16 @@ const navItems = [
 const HackathonDashboard = () => {
   const [active, setActive] = useState("dashboard");
   const [mobileOpen, setMobileOpen] = useState(false);
+
   const navigate = useNavigate();
 
   return (
     <div className="hackathon-dashboard-wrapper">
 
       <aside
-        className={`hd-sidebar ${mobileOpen ? "hd-sidebar-open" : ""
-          }`}
+        className={`hd-sidebar ${
+          mobileOpen ? "hd-sidebar-open" : ""
+        }`}
       >
 
         <div className="hd-sidebar-header">
@@ -108,8 +110,9 @@ const HackathonDashboard = () => {
                   setActive(item.id);
                   setMobileOpen(false);
                 }}
-                className={`hd-nav-item ${isActive ? "hd-nav-active" : ""
-                  }`}
+                className={`hd-nav-item ${
+                  isActive ? "hd-nav-active" : ""
+                }`}
               >
 
                 <Icon className="hd-nav-icon" />
@@ -120,8 +123,9 @@ const HackathonDashboard = () => {
 
                 {item.badge && (
                   <span
-                    className={`hd-badge hd-badge-${item.color} ${isActive ? "hd-badge-active" : ""
-                      }`}
+                    className={`hd-badge hd-badge-${item.color} ${
+                      isActive ? "hd-badge-active" : ""
+                    }`}
                   >
                     {item.badge}
                   </span>
@@ -153,7 +157,8 @@ const HackathonDashboard = () => {
 
             </div>
 
-            <button className="hd-logout-btn"
+            <button
+              className="hd-logout-btn"
               onClick={() => navigate("/")}
             >
               <LogOut size={16} />
@@ -188,20 +193,20 @@ const HackathonDashboard = () => {
           </div>
         )}
 
+        {active === "teams" && (
+          <div className="hd-content">
+            <Teams />
+          </div>
+        )}
+
         {active === "round1" && (
           <div className="hd-content">
             <Round1 />
           </div>
         )}
-        ) : active === "teams" ? (
-
-          <div className="hd-content">
-            <Teams />
-          </div>
-
-        ) : (
 
         {active !== "dashboard" &&
+          active !== "teams" &&
           active !== "round1" && (
             <div className="hd-empty-wrapper">
 
