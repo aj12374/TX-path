@@ -1,9 +1,8 @@
 import { memo, useMemo } from "react";
 import "./SkillsOrbit.css";
 import skillsData from "./skillsData";
-import logo1 from "../../../../../assets/tx-icon.jpg"
+import logo1 from "../../../../../assets/tx-icon.jpg";
 function SkillsOrbit() {
-
   const stars = useMemo(() => {
     return Array.from({ length: 90 }, (_, i) => ({
       id: i,
@@ -22,7 +21,6 @@ function SkillsOrbit() {
 
   return (
     <div className="orbit-wrapper">
-
       <div className="stars">
         {stars.map((star) => (
           <span
@@ -64,50 +62,31 @@ function SkillsOrbit() {
         ))}
       </div>
 
-
       <div className="scene">
-
         <div className="center-glow" />
 
         <div className="center-circle">
-
           <div className="center-logo-wrapper">
-
-            <img
-              src={logo1}
-              alt="TX Pathwing"
-              className="center-logo"
-            />
-
+            <img src={logo1} alt="TX Pathwing" className="center-logo" />
           </div>
 
-          <div className="center-brand">
-            TX PATHWAY
-          </div>
+          <div className="center-brand">TX PATHWAY</div>
 
           <div className="center-divider" />
-
         </div>
 
         {skillsData.map((ring, ringIndex) => {
-
           const direction =
             ring.direction ||
-            (ringIndex % 2 === 0
-              ? "clockwise"
-              : "anticlockwise");
-
+            (ringIndex % 2 === 0 ? "clockwise" : "anticlockwise");
 
           const speed = ring.speed || 25;
-
 
           return (
             <div
               key={ringIndex}
               className={`orbit-ring orbit-ring-${ringIndex + 1} ${
-                direction === "clockwise"
-                  ? "rotate-cw"
-                  : "rotate-ccw"
+                direction === "clockwise" ? "rotate-cw" : "rotate-ccw"
               }`}
               style={{
                 width: `${ring.radius * 2}px`,
@@ -115,12 +94,8 @@ function SkillsOrbit() {
                 animationDuration: `${speed}s`,
               }}
             >
-
               {ring.skills.map((skill, skillIndex) => {
-
-                const angle =
-                  (360 / ring.skills.length) * skillIndex;
-
+                const angle = (360 / ring.skills.length) * skillIndex;
 
                 return (
                   <div
@@ -133,12 +108,9 @@ function SkillsOrbit() {
                       `,
                     }}
                   >
-
                     <div
                       className={`skill ${
-                        skillIndex % 2 === 0
-                          ? "skill-white"
-                          : "skill-black"
+                        skillIndex % 2 === 0 ? "skill-white" : "skill-black"
                       } ${
                         direction === "clockwise"
                           ? "skill-counter-cw"
@@ -148,19 +120,14 @@ function SkillsOrbit() {
                         animationDuration: `${speed}s`,
                       }}
                     >
-
                       {skill}
-
                     </div>
-
                   </div>
                 );
               })}
-
             </div>
           );
         })}
-
       </div>
     </div>
   );

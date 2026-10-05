@@ -1,0 +1,286 @@
+:root {
+  --ink: #111827;
+  --muted: #667085;
+  --paper: #f5f7fb;
+  --card: #ffffff;
+  --line: #e5e9f1;
+  --brand: #6d2be0;
+  --blue: #2f7cf6;
+  --green: #0f9f68;
+  --shadow: 0 18px 55px rgba(15, 23, 42, 0.08);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 8% 5%, rgba(109,43,224,.08), transparent 24%),
+    radial-gradient(circle at 92% 12%, rgba(47,124,246,.07), transparent 24%),
+    var(--paper);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.page { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 80px; }
+.pageHeader { margin-bottom: 28px; }
+.eyebrow {
+  display: inline-flex;
+  padding: 7px 11px;
+  border: 1px solid #dce4f5;
+  border-radius: 999px;
+  background: #fff;
+  color: #435273;
+  font-size: 11px;
+  font-weight: 800;
+}
+.pageHeader h1 { margin: 13px 0 8px; font-size: clamp(30px, 5vw, 46px); letter-spacing: -1.8px; }
+.pageHeader p { margin: 0; color: var(--muted); max-width: 700px; line-height: 1.65; }
+
+.progressCard {
+  position: sticky;
+  top: 14px;
+  z-index: 10;
+  padding: 18px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 10px 35px rgba(15,23,42,.07);
+}
+.progressTrack { height: 5px; border-radius: 99px; background: #e9edf4; overflow: hidden; }
+.progressFill { height: 100%; background: linear-gradient(90deg, #6d2be0, #2f7cf6, #26d6e9); transition: width .25s ease; }
+.progressItems { display: flex; gap: 7px; overflow-x: auto; padding-top: 12px; }
+.progressItem {
+  flex: 1 0 120px;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 11px;
+  color: #7c879b;
+  background: #f3f5f9;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: left;
+}
+.progressItem:disabled { opacity: .58; cursor: not-allowed; }
+.progressItem.active { color: #2455b8; background: #edf2ff; }
+.progressItem.completed { color: #087443; background: #eafaf3; }
+.progressNumber {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #dce2ec;
+}
+
+.formCard {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+.cardHeader { margin-bottom: 24px; }
+.cardHeader h2 { margin: 0 0 6px; font-size: 24px; letter-spacing: -.7px; }
+.cardHeader p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+.formGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field.full { grid-column: 1 / -1; }
+.field label { color: #465066; font-size: 12px; font-weight: 800; }
+.field input, .field select, .field textarea {
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fbfcfe;
+  padding: 12px;
+  outline: none;
+  color: var(--ink);
+}
+.field textarea { min-height: 105px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: #7b8dff; box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
+
+.field.hasError label { color: #d32f2f; }
+.field.hasError input, .field.hasError select, .field.hasError textarea {
+  border-color: #d32f2f !important;
+  background-color: #fff8f8 !important;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.12) !important;
+}
+
+.errorText {
+  color: #d32f2f;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.formErrorMessage {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background-color: #fde8e8;
+  border: 1px solid #f8b4b4;
+  border-radius: 10px;
+  color: #9b1c1c;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.choiceGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+.choiceCard {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  transition: .18s ease;
+}
+.choiceCard:hover { border-color: #a4b1ff; transform: translateY(-1px); }
+.choiceCard.selected { border: 2px solid #315efb; background: #f4f6ff; }
+.choiceCard input { margin-top: 3px; accent-color: #315efb; }
+.choiceCard strong { font-size: 14px; }
+.choiceCard p { margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.choiceCard.compact { align-items: center; padding: 13px; }
+
+.notice {
+  margin: 18px 0;
+  padding: 13px 15px;
+  border: 1px solid #dce4ff;
+  border-radius: 12px;
+  background: #f3f6ff;
+  color: #4b5d91;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.notice.warning { border-color: #f0dfb2; background: #fff8e9; color: #7c6325; }
+
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 25px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.button {
+  border: 0;
+  border-radius: 11px;
+  padding: 12px 17px;
+  font-weight: 850;
+  transition: all 0.2s ease;
+}
+.button.primary {
+  color: #fff;
+  background: linear-gradient(100deg, #6d2be0 0%, #2f7cf6 65%, #26d6e9 100%);
+  box-shadow: 0 4px 14px rgba(109, 43, 224, 0.3);
+}
+.button.primary:hover:not(:disabled) {
+  background: linear-gradient(100deg, #5b1ecd 0%, #1e6be0 65%, #1cc2d4 100%);
+  box-shadow: 0 6px 18px rgba(109, 43, 224, 0.45);
+  transform: translateY(-1px);
+}
+.button.secondary { color: #344054; background: #fff; border: 1px solid var(--line); }
+.button:disabled { opacity: .5; cursor: not-allowed; }
+.addMember { margin-top: 14px; }
+
+.memberCard {
+  padding: 17px;
+  margin-bottom: 13px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #fbfcfe;
+}
+.memberHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.pill {
+  display: inline-flex;
+  margin-left: 8px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4d5db6;
+  font-size: 10px;
+  font-weight: 900;
+}
+.removeButton { border: 0; border-radius: 8px; padding: 7px 9px; background: #fff0f0; color: #b42318; }
+
+.topSpace, .otherField { margin-top: 16px; }
+.inlineOptions { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 9px; }
+
+.reviewSection {
+  padding: 18px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fbfcfe;
+}
+.reviewHeading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.reviewHeading h3 { margin: 0; font-size: 15px; }
+.linkButton { border: 0; background: transparent; color: #2455b8; font-weight: 800; }
+.reviewRow {
+  display: grid;
+  grid-template-columns: minmax(160px, .7fr) 1.3fr;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid #edf0f5;
+  font-size: 12px;
+}
+.reviewRow:last-child { border-bottom: 0; }
+.reviewRow span { color: var(--muted); }
+.reviewRow strong { overflow-wrap: anywhere; }
+.memberReview { margin-top: 12px; padding-top: 12px; border-top: 1px dashed #dfe4ed; }
+
+.successCard { text-align: center; padding: 60px 24px; }
+.successIcon {
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: #eafaf3;
+  color: #087443;
+  font-size: 40px;
+  font-weight: 900;
+}
+.successCard h2 { margin: 0 0 8px; font-size: 28px; }
+.successCard p { color: var(--muted); }
+.registrationId {
+  display: inline-block;
+  margin: 12px 0 22px;
+  padding: 12px 18px;
+  border-radius: 11px;
+  background: #eef2ff;
+  color: #304ca8;
+  font-weight: 900;
+}
+
+@media (max-width: 760px) {
+  .page { width: min(100% - 22px, 1180px); padding-top: 25px; }
+  .formCard { padding: 19px; }
+  .formGrid, .choiceGrid { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+  .progressCard { top: 8px; }
+  .progressItem { flex-basis: 150px; }
+  .formActions { flex-direction: column-reverse; }
+  .formActions .button { width: 100%; }
+  .reviewRow { grid-template-columns: 1fr; gap: 4px; }
+}
