@@ -218,46 +218,6 @@ const HackathonDashboard = () => {
   </div>
 )}
 
-        {active !== "dashboard" &&
-          active !== "teams" &&
-          active !== "round1" && (
-            <div className="hd-empty-wrapper">
-
-              <div className="hd-empty-box">
-
-                <div className="hd-empty-icon">
-
-                  {(() => {
-
-                    const ActiveIcon =
-                      navItems.find(
-                        (item) => item.id === active
-                      )?.icon;
-
-                    return ActiveIcon ? (
-                      <ActiveIcon size={32} />
-                    ) : null;
-
-                  })()}
-
-                </div>
-
-                <h2 className="hd-empty-title">
-                  {active}
-                </h2>
-
-                <p className="hd-empty-text">
-                  Empty screen - {active} page content will go here
-                </p>
-
-                <div className="hd-empty-tag">
-                  Left sidebar navigation working
-                </div>
-
-              </div>
-
-            </div>
-          )}
 
       </div>
 
