@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FormCard from "./FormCard";
 
 // Paste your Apps Script Web App URL ending in /exec here:
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTZFWh7k2pDyKaIp9euVTs19DvnE1lxQ16HMNk8l36OjXBgcnBnI-1rtYDBhkWUp4/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGwnCM94klP0kXUGHDy-iq3s1-PQiRc1blIQstYfCJbslldyVMp1Nz47WpnyUkfgY/exec";
 
 function value(val) {
   if (val === undefined || val === null || val === "") return "Not provided";
