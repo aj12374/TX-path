@@ -5,56 +5,56 @@ import "./StudentReviews.css";
 const reviews = [
   {
     id: 1,
-    name: "Sneha Reddy",
+    name: "Hari Chari",
     course: "Full Stack Development",
     comment:
       "The training was very practical and well-structured. I gained real-world skills and confidence to face interviews.",
   },
   {
     id: 2,
-    name: "Arjun Kumar",
+    name: "Ajay",
     course: "MERN Stack Development",
     comment:
       "The projects helped me understand concepts deeply and build a strong portfolio. The learning experience was excellent.",
   },
   {
     id: 3,
-    name: "Priya Sharma",
+    name: "Sowmya",
     course: "DevOps & Cloud",
     comment:
       "The mentors were very supportive and the hands-on learning helped me understand real-world DevOps concepts.",
   },
   {
     id: 4,
-    name: "Rahul Verma",
+    name: "Likesh",
     course: "Python Development",
     comment:
       "The real-world projects and interview preparation sessions helped me build confidence and improve my technical skills.",
   },
   {
     id: 5,
-    name: "Anjali Mehta",
+    name: "Vishnu",
     course: "Data Science",
     comment:
       "The content was easy to follow and very practical. I gained confidence working with real datasets and projects.",
   },
   {
     id: 6,
-    name: "Kiran Reddy",
+    name: "Vamshi",
     course: "Java Full Stack",
     comment:
       "The practical assignments made learning much easier. I enjoyed working on real-world application projects.",
   },
   {
     id: 7,
-    name: "Vikram Singh",
+    name: "Shashi",
     course: "React Development",
     comment:
       "The project-based approach helped me understand React concepts clearly and gave me confidence to build applications.",
   },
   {
     id: 8,
-    name: "Divya Sharma",
+    name: "Bhargavi",
     course: "AWS & DevOps",
     comment:
       "A structured learning experience with useful projects, clear explanations and excellent career guidance.",

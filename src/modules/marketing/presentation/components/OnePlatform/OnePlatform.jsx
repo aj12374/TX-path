@@ -21,7 +21,7 @@ const cards = [
     id: "02",
     label: "COLLEGES",
     icon: "⌖",
-    title: "Institutions",
+    title: "Organizations",
     desc: "Launch your own branded LMS with student and placement analytics.",
     bullets: [
       "White-label LMS & catalog",

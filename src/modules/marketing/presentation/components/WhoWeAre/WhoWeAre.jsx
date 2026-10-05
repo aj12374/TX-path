@@ -6,6 +6,7 @@ import {
     UserRound,
 } from "lucide-react";
 import "./WhoWeAre.css";
+import { useNavigate } from "react-router-dom";
 
 import organizationImage from "../../components/assets/organization.png";
 import learnerImage from "../../components/assets/learner.png";
@@ -16,6 +17,7 @@ import Training from "../../components/assets/traning.png";
 import Internships from "../../components/assets/traning.png";
 import Opportunities from "../../components/assets/traning.png";
 import learner from "../../components/assets/contact-students.png"
+import Events from "../../pages/Events/Events";
 
 const organizationPoints = [
     "Branded Learning Platforms",
@@ -136,6 +138,7 @@ function PathwingVisual() {
 }
 
 export default function WhoWeAre() {
+    const navigate = useNavigate();
     return (
         <>
             <section className="hero-section">
@@ -158,12 +161,14 @@ export default function WhoWeAre() {
                         </p>
 
                         <div className="hero-actions">
-                            <button className="primary-button">
+                            <button className="primary-button"
+                            onClick={()=>navigate("/events")}>
                                 Explore Our Ecosystem
                                 <ArrowRight size={18} />
                             </button>
 
-                            <button className="secondary-button">
+                            <button className="secondary-button"
+                            onClick={()=>navigate("/contact")}>
                                 Partner with Us
                             </button>
                         </div>

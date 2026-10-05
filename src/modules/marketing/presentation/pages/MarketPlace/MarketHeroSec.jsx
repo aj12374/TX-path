@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import ai from '../../../../../assets/marketplaceImages/ai-data.png'
-import career from '../../../../../assets/marketplaceImages/career.png'
-import cloud from '../../../../../assets/marketplaceImages/cloud-devops.png'
-import software from '../../../../../assets/marketplaceImages/software-development.png'
-import testing from '../../../../../assets/marketplaceImages/testing.png'
-import './MarketHeroSec.css'
+import React, { useEffect, useRef, useState } from "react";
 
+import ai from "../../../../../assets/marketplaceImages/ai-data.png";
+import career from "../../../../../assets/marketplaceImages/career.png";
+import cloud from "../../../../../assets/marketplaceImages/cloud-devops.png";
+import software from "../../../../../assets/marketplaceImages/software-development.png";
+import testing from "../../../../../assets/marketplaceImages/testing.png";
 
+import "./MarketHeroSec.css";
 
 function BannerCarousel() {
-    const bannerImages = [ai,career,cloud,software,testing,];
+  const bannerImages = [
+    ai,
+    career,
+    cloud,
+    software,
+    testing,
+  ];
 
   const slides = [
     bannerImages[bannerImages.length - 1],
@@ -18,46 +24,71 @@ function BannerCarousel() {
   ];
 
   const [currentSlide, setCurrentSlide] = useState(1);
-
   const [isTransitioning, setIsTransitioning] = useState(true);
 
+  const timerRef = useRef(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const startAutoSlide = () => {
+    clearTimeout(timerRef.current);
+
+    timerRef.current = setTimeout(() => {
       setCurrentSlide((prev) => prev + 1);
     }, 4000);
+  };
 
-    return () => clearInterval(interval);
+  useEffect(() => {
+    startAutoSlide();
+
+    return () => {
+      clearTimeout(timerRef.current);
+    };
   }, []);
 
-  const handleTransitionEnd = () => {
+  const handleTransitionEnd = (event) => {
+    if (event.propertyName !== "transform") {
+      return;
+    }
 
     if (currentSlide === slides.length - 1) {
       setIsTransitioning(false);
       setCurrentSlide(1);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsTransitioning(true);
+          startAutoSlide();
+        });
+      });
+
+      return;
     }
 
     if (currentSlide === 0) {
       setIsTransitioning(false);
       setCurrentSlide(bannerImages.length);
-    }
-  };
 
-  useEffect(() => {
-    if (!isTransitioning) {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setIsTransitioning(true);
+          startAutoSlide();
         });
       });
+
+      return;
     }
-  }, [isTransitioning]);
+
+    startAutoSlide();
+  };
 
   const handlePrevious = () => {
+    clearTimeout(timerRef.current);
+    setIsTransitioning(true);
     setCurrentSlide((prev) => prev - 1);
   };
 
   const handleNext = () => {
+    clearTimeout(timerRef.current);
+    setIsTransitioning(true);
     setCurrentSlide((prev) => prev + 1);
   };
 
@@ -68,14 +99,19 @@ function BannerCarousel() {
       ? 0
       : currentSlide - 1;
 
+  const handleDotClick = (index) => {
+    clearTimeout(timerRef.current);
+    setIsTransitioning(true);
+    setCurrentSlide(index + 1);
+  };
+
   return (
     <section className="banner-carousel">
       <div className="banner-window">
-
         <div
           className="banner-track"
           style={{
-            transform: `translateX(-${currentSlide * 100}%)`,
+            transform: `translate3d(-${currentSlide * 100}%, 0, 0)`,
             transition: isTransitioning
               ? "transform 0.7s ease-in-out"
               : "none",
@@ -87,6 +123,7 @@ function BannerCarousel() {
               <img
                 src={image}
                 alt={`Banner ${index + 1}`}
+                draggable="false"
               />
             </div>
           ))}
@@ -95,6 +132,7 @@ function BannerCarousel() {
         <button
           className="banner-arrow banner-prev"
           onClick={handlePrevious}
+          aria-label="Previous banner"
         >
           ‹
         </button>
@@ -102,10 +140,10 @@ function BannerCarousel() {
         <button
           className="banner-arrow banner-next"
           onClick={handleNext}
+          aria-label="Next banner"
         >
           ›
         </button>
-
       </div>
 
       <div className="banner-dots">
@@ -115,13 +153,11 @@ function BannerCarousel() {
             className={`banner-dot ${
               activeDot === index ? "active" : ""
             }`}
-            onClick={() => {
-              setCurrentSlide(index + 1);
-            }}
+            onClick={() => handleDotClick(index)}
+            aria-label={`Go to banner ${index + 1}`}
           />
         ))}
       </div>
-
     </section>
   );
 }

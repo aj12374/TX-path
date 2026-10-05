@@ -121,10 +121,9 @@
 
 
 .reviews-track {
+  padding: 5px;
   display: flex;
-
   width: max-content;
-
   gap: 24px;
 }
 
