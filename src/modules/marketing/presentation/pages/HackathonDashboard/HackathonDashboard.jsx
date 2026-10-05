@@ -16,6 +16,8 @@ import {
 import Overview from "./Overview";
 import Teams from "./Teams";
 import "./HackathonDashboard.css";
+import Round2 from "./Round2";
+import Round3 from "./Round3";
 
 const navItems = [
   {
@@ -204,6 +206,17 @@ const HackathonDashboard = () => {
             <Round1 />
           </div>
         )}
+        {active === "round2" && (
+  <div className="hd-content">
+    <Round2 />
+  </div>
+)}
+
+{active === "round3" && (
+  <div className="hd-content">
+    <Round3 />
+  </div>
+)}
 
         {active !== "dashboard" &&
           active !== "teams" &&
