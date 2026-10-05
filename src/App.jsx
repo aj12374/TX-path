@@ -1,122 +1,128 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+﻿import { useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Header from "./modules/marketing/presentation/components/Header/Header";
+import Footer from "./modules/marketing/presentation/components/Footer/Footer";
+
+import Home from "./modules/marketing/presentation/pages/Home/Home";
+import LearnerJourney from "./modules/marketing/presentation/pages/Learner_journey/Learner_journey";
+import About from "./modules/marketing/presentation/pages/About/About";
+
+import Marketplace from "./modules/marketing/presentation/pages/MarketPlace/MarketPlace";
+import Blog from "./modules/marketing/presentation/pages/Blog/Blog";
+import CareersHero from "./modules/marketing/presentation/pages/Careers/Careers";
+import Organization from "./modules/marketing/presentation/pages/Contact/Contact";
+import Cart from "./modules/marketing/presentation/pages/Cart/Cart";
+import CourseDetail from "./modules/marketing/presentation/pages/CourseDetails/CourseDetails";
+
+import Login from "./modules/marketing/presentation/components/Login/Login";
+import Signin from "./modules/marketing/presentation/components/Login/signin";
+
+import RegistrationForm from "./modules/marketing/presentation/components/HackathonRegistration/RegistrationForm";
+import Events from "./modules/marketing/presentation/pages/Events/Events.jsx";
+
+// Hackathon Dashboard
+import HackathonDashboard from "./modules/marketing/presentation/pages/HackathonDashboard/HackathonDashboard.jsx";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
+function AppLayout() {
+  const location = useLocation();
+
+  // Don't show normal website Header/Footer on admin dashboard
+  const isHackathonDashboard =
+    location.pathname === "/hackathon-dashboard";
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <ScrollToTop />
 
-      <div className="ticks"></div>
+      {!isHackathonDashboard && <Header />}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <Routes>
+        {/* Home */}
+        <Route path="/" element={<Home />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+        {/* Explore / Marketplace */}
+        <Route path="/marketplace" element={<Marketplace />} />
+
+        {/* Course Details */}
+        <Route path="/course/:id" element={<CourseDetail />} />
+
+        {/* Other pages */}
+        <Route path="/events" element={<Events />} />
+
+        <Route path="/careers" element={<CareersHero />} />
+
+        <Route path="/blog" element={<Blog />} />
+
+        <Route
+          path="/learner-journey"
+          element={<LearnerJourney />}
+        />
+
+        <Route path="/about" element={<About />} />
+
+        <Route
+          path="/contact"
+          element={<Organization />}
+        />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/Signin" element={<Signin />} />
+
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
+
+        <Route
+          path="/registration"
+          element={<RegistrationForm />}
+        />
+
+        {/* =====================================
+            HACKATHON ADMIN DASHBOARD
+            ===================================== */}
+        <Route
+          path="/hackathon-dashboard"
+          element={<HackathonDashboard />}
+        />
+
+        {/* Checkout - enable when Checkout.jsx exists */}
+        {/*
+        <Route
+          path="/checkout/:id"
+          element={<Checkout />}
+        />
+        */}
+      </Routes>
+
+      {!isHackathonDashboard && <Footer />}
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout />
+    </BrowserRouter>
+  );
+}
+
+export default App;

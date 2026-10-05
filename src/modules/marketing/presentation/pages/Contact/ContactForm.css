@@ -1,0 +1,559 @@
+/* =================================
+   Contact Section
+================================= */
+
+.contact-section {
+  width: 100%;
+  padding: 30px 7%;
+  background: #ffffff;
+}
+
+
+/* =================================
+   Heading
+================================= */
+
+.contact-heading {
+  max-width: 800px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
+
+.contact-heading .section-label {
+  display: inline-block;
+  margin-bottom: 14px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+  text-transform: uppercase;
+
+  color: #1d5f9e;
+}
+
+.contact-heading h2 {
+  margin: 0;
+
+  font-size: 44px;
+  line-height: 1.15;
+  font-weight: 700;
+
+  letter-spacing: -0.8px;
+
+  color: #182433;
+}
+
+.contact-heading h2 span {
+  color: #1d5f9e;
+}
+
+.contact-heading p {
+  max-width: 620px;
+
+  margin: 20px auto 0;
+
+  font-size: 16px;
+  line-height: 1.7;
+
+  color: #667085;
+}
+
+
+/* =================================
+   Inquiry Options
+================================= */
+
+.inquiry-options {
+  width: 100%;
+  max-width: 650px;
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+/* =================================
+   Inquiry Option
+================================= */
+
+.inquiry-option {
+  position: relative;
+
+  width: 100%;
+  min-height: 78px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 16px 20px;
+
+  border: 1px solid #e0e6ec;
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  color: #182433;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 15px rgba(24, 36, 51, 0.04);
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.inquiry-option:hover {
+  border-color: #1d5f9e;
+
+  background: #f8fbfe;
+
+  box-shadow:
+    0 10px 28px rgba(29, 95, 158, 0.10);
+
+  transform: translateY(-2px);
+}
+
+
+/* =================================
+   Radio
+================================= */
+
+.inquiry-radio {
+  width: 22px;
+  height: 22px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-right: 16px;
+
+  border: 2px solid #aeb9c5;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  transition: border-color 0.25s ease;
+}
+
+.inquiry-option:hover .inquiry-radio {
+  border-color: #1d5f9e;
+}
+
+.inquiry-radio-dot {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #1d5f9e;
+
+  opacity: 0;
+
+  transform: scale(0.5);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.inquiry-option:hover .inquiry-radio-dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* =================================
+   Inquiry Content
+================================= */
+
+.inquiry-content {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.inquiry-content strong {
+  font-size: 16px;
+  font-weight: 650;
+
+  color: #182433;
+}
+
+.inquiry-content small {
+  font-size: 13px;
+  font-weight: 400;
+
+  color: #7a8795;
+}
+
+
+/* =================================
+   Arrow
+================================= */
+
+.inquiry-arrow {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f1f6fa;
+
+  color: #1d5f9e;
+
+  font-size: 18px;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.inquiry-option:hover .inquiry-arrow {
+  background: #e5f0f8;
+
+  transform: translateX(3px);
+}
+
+
+/* =================================
+   MODAL OVERLAY
+================================= */
+
+.contact-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  background:
+    rgba(15, 27, 40, 0.58);
+
+  backdrop-filter: blur(6px);
+
+  animation: overlayShow 0.25s ease;
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =================================
+   MODAL
+================================= */
+
+.contact-modal {
+  width: 100%;
+  max-width: 850px;
+
+  max-height: 90vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 30px 80px rgba(10, 30, 50, 0.25);
+
+  animation: modalShow 0.3s ease;
+}
+
+@keyframes modalShow {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =================================
+   Modal Header
+================================= */
+
+.contact-modal-header {
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  padding: 28px 32px 24px;
+
+  border-bottom: 1px solid #edf0f3;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f8fbfe 100%
+    );
+}
+
+.modal-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 1.7px;
+
+  color: #1d5f9e;
+}
+
+.contact-modal-header h3 {
+  margin: 0;
+
+  font-size: 26px;
+  font-weight: 700;
+
+  color: #182433;
+}
+
+.contact-modal-header p {
+  margin: 7px 0 0;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  color: #7a8795;
+}
+
+
+/* =================================
+   Close Button
+================================= */
+
+.modal-close-button {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 20px;
+
+  border: 1px solid #e1e7ed;
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #526273;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.modal-close-button:hover {
+  border-color: #1d5f9e;
+
+  background: #edf5fc;
+
+  color: #1d5f9e;
+
+  transform: rotate(90deg);
+}
+
+
+/* =================================
+   Modal Body
+================================= */
+
+.contact-modal-body {
+  overflow-y: auto;
+
+  padding: 30px 32px 32px;
+}
+
+
+/* =================================
+   Scrollbar
+================================= */
+
+.contact-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contact-modal-body::-webkit-scrollbar-track {
+  background: #f5f7f9;
+}
+
+.contact-modal-body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background: #c8d2dc;
+}
+
+
+/* =================================
+   Tablet
+================================= */
+
+@media (max-width: 768px) {
+
+  .contact-section {
+    padding: 70px 5%;
+  }
+
+  .contact-heading h2 {
+    font-size: 36px;
+  }
+
+  .contact-modal {
+    max-width: 95%;
+    max-height: 92vh;
+  }
+
+  .contact-modal-header {
+    padding: 24px;
+  }
+
+  .contact-modal-body {
+    padding: 25px;
+  }
+
+}
+
+
+/* =================================
+   Mobile
+================================= */
+
+@media (max-width: 468px) {
+
+  .contact-section {
+    padding: 55px 20px;
+  }
+
+  .contact-heading h2 {
+    font-size: 29px;
+  }
+
+  .contact-heading p {
+    font-size: 14px;
+  }
+
+  .inquiry-options {
+    gap: 11px;
+  }
+
+  .inquiry-option {
+    min-height: 70px;
+
+    padding: 13px 15px;
+
+    border-radius: 12px;
+  }
+
+  .inquiry-content strong {
+    font-size: 15px;
+  }
+
+  .inquiry-content small {
+    font-size: 11px;
+  }
+
+  .inquiry-radio {
+    width: 20px;
+    height: 20px;
+
+    margin-right: 12px;
+  }
+
+  .inquiry-arrow {
+    width: 30px;
+    height: 30px;
+  }
+
+  .contact-modal-overlay {
+    padding: 12px;
+  }
+
+  .contact-modal {
+    max-width: 100%;
+
+    max-height: 94vh;
+
+    border-radius: 16px;
+  }
+
+  .contact-modal-header {
+    padding: 20px;
+  }
+
+  .contact-modal-header h3 {
+    font-size: 21px;
+  }
+
+  .contact-modal-header p {
+    font-size: 12px;
+  }
+
+  .modal-close-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .contact-modal-body {
+    padding: 22px 18px 25px;
+  }
+
+}

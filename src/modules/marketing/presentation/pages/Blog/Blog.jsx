@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -10,10 +10,20 @@ import {
   X,
   Check,
   Sparkles,
+  BrainCircuit,
+  Globe,
+  BriefcaseBusiness,
+  ChartNoAxesCombined,
 } from "lucide-react";
-import SEO from "../../pages/SEO/SEO.jsx";
-import { categories, allBlogPosts } from "../SEO/BlogData.js";
+import SEO from "../../pages/SEO/SEO";
+import { categories, allBlogPosts } from "../../pages/SEO/BlogData";
+import blogHeroImg from "../../../../../assets/blog/blog-hero-exact.png";
+import blogHeroFallback from "../../../../../assets/blog_hero_book.jpg";
+import BlogAnimation from "./BlogAnimation";
 import "./Blog.css";
+import BlogOverview from "./BlogOverview";
+import BlogStories from "./BlogStories";
+import BlogWriteForUs from "./BlogWriteForUs";
 
 const Blog = () => {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -62,77 +72,20 @@ const Blog = () => {
       />
 
       {/* ── 1. HERO SECTION ── */}
-      <section className="blog-hero-section">
-        {/* Background Glows */}
-        <div className="blog-hero-glow-1" />
-        <div className="blog-hero-glow-2" />
-        <div className="blog-hero-glow-3" />
-        <div className="blog-hero-grid-pattern" />
 
-        <div className="blog-hero-content">
-          <div className="blog-hero-grid">
-            {/* Left Column */}
-            <div className="blog-hero-left">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="blog-hero-title"
-              >
-                Your Learning <br />
-                Journey <br />
-                <span className="blog-hero-gradient-text">
-                  Starts Here
-                </span>
-              </motion.h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="blog-hero-subtitle"
-              >
-                Actionable insights, expert tutorials, and career guidance to help you stay ahead.
-              </motion.p>
 
-              {/* Search Bar */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="blog-search-wrapper"
-              >
-                <form
-                  onSubmit={(e) => e.preventDefault()}
-                  className="blog-search-form"
-                >
-                  <Search className="text-slate-400" size={20} style={{ marginRight: "0.5rem", flexShrink: 0 }} />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search articles, topics..."
-                    className="blog-search-input"
-                  />
-                  {searchQuery && (
-                    <button
-                      type="button"
-                      onClick={() => setSearchQuery("")}
-                      className="blog-search-clear-btn"
-                      title="Clear search"
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
-                  <button
-                    type="submit"
-                    className="blog-search-submit-btn"
-                  >
-                    Search
-                  </button>
-                </form>
-              </motion.div>
 
+
+      {/* ── 2. TOP ARTICLES SECTION ── */}
+      <section className="blog-articles-section">
+        <div className="blog-articles-container">
+          {/* Section Header */}
+          <div className="blog-articles-header">
+            <div>
+              <h2 className="blog-section-heading">
+                Explore Our <span>Top Articles</span>
+              </h2>
               {/* Category Navigation Icons */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -142,7 +95,16 @@ const Blog = () => {
               >
                 <div className="blog-categories-track">
                   {categories.map((cat) => {
-                    const IconComponent = cat.icon;
+                    const IconComponent =
+                      cat.name.toLowerCase().includes("ai")
+                        ? BrainCircuit
+                        : cat.name.toLowerCase().includes("web")
+                          ? Globe
+                        : cat.name.toLowerCase().includes("career")
+                          ? BriefcaseBusiness
+                        : cat.name.toLowerCase().includes("data")
+                          ? ChartNoAxesCombined
+                          : cat.icon;
                     const isActive = activeCategory === cat.id;
 
                     return (
@@ -161,47 +123,11 @@ const Blog = () => {
                     );
                   })}
                 </div>
-              </motion.div>
-            </div>
 
-            {/* Right Column: Hero Illustration Artwork */}
-            <div className="blog-hero-right">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="blog-hero-artwork-box"
-              >
-                <div className="blog-hero-art-glow" />
-                <motion.div
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-                >
-                  <img
-                    src="/images/blog/blog-hero-exact.png"
-                    alt="Student learning with modern technology"
-                    className="blog-hero-img"
-                  />
-                </motion.div>
               </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 2. TOP ARTICLES SECTION ── */}
-      <section className="blog-articles-section">
-        <div className="blog-articles-container">
-          {/* Section Header */}
-          <div className="blog-articles-header">
-            <div>
-              <h2 className="blog-section-heading">
-                Top Articles
-              </h2>
               {activeCategory !== "All" && (
                 <p className="blog-filter-indicator">
-                  Showing results for <span style={{ fontWeight: 600, color: "var(--blue-600)" }}>{activeCategory}</span>
+                  Showing results for <span className="blog-filter-category-name">{activeCategory}</span>
                 </p>
               )}
             </div>
@@ -234,7 +160,7 @@ const Blog = () => {
                 >
                   <div className="blog-card-media">
                     <img
-                      src={post.image}
+                      src={post.image || blogHeroFallback}
                       alt={post.title.replace("\n", " ")}
                       className="blog-card-img"
                     />
@@ -243,7 +169,7 @@ const Blog = () => {
 
                   <div className="blog-card-body">
                     <div>
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem", marginBottom: "0.75rem" }}>
+                      <div className="blog-card-meta-header">
                         <span className="blog-card-category-badge">
                           {post.category}
                         </span>
@@ -263,24 +189,24 @@ const Blog = () => {
                     </div>
 
                     <div className="blog-card-footer">
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+                      <span className="blog-card-read-action">
                         Read article <ArrowRight size={13} />
                       </span>
 
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <div className="blog-card-actions">
                         <button
                           onClick={(e) => toggleBookmark(post.id, e)}
                           title="Bookmark article"
-                          style={{ padding: "0.25rem", color: "var(--slate-400)" }}
+                          className="blog-card-action-btn"
                         >
-                          <Bookmark size={15} className={bookmarkedIds.includes(post.id) ? "fill-blue-600 text-blue-600" : ""} />
+                          <Bookmark size={15} className={bookmarkedIds.includes(post.id) ? "blog-bookmark-active" : ""} />
                         </button>
                         <button
                           onClick={(e) => handleShare(post, e)}
                           title="Share link"
-                          style={{ padding: "0.25rem", color: "var(--slate-400)" }}
+                          className="blog-card-action-btn"
                         >
-                          {copiedId === post.id ? <Check size={15} color="#16a34a" /> : <Share2 size={15} />}
+                          {copiedId === post.id ? <Check size={15} className="blog-check-icon" /> : <Share2 size={15} />}
                         </button>
                       </div>
                     </div>
@@ -292,26 +218,30 @@ const Blog = () => {
 
           {/* Empty Search State */}
           {filteredPosts.length === 0 && (
-            <div style={{ textAlign: "center", padding: "4rem 1rem", backgroundColor: "#ffffff", borderRadius: "1rem", border: "1px solid rgba(226,232,240,0.8)", marginTop: "1.5rem" }}>
-              <div style={{ width: "3.5rem", height: "3.5rem", background: "var(--blue-50)", color: "var(--blue-600)", borderRadius: "9999px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.75rem auto" }}>
+            <div className="blog-empty-state">
+              <div className="blog-empty-state-icon">
                 <BookOpen size={24} />
               </div>
-              <h3 style={{ fontSize: "1.125rem", fontWeight: 700, color: "var(--slate-800)", marginBottom: "0.25rem" }}>No articles found</h3>
-              <p style={{ color: "var(--slate-500)", fontSize: "0.875rem", maxWidth: "24rem", margin: "0 auto 1.25rem auto" }}>
+              <h3 className="blog-empty-state-title">No articles found</h3>
+              <p className="blog-empty-state-desc">
                 Try searching with different keywords or reset your filters.
               </p>
               <button
                 onClick={() => { setActiveCategory("All"); setSearchQuery(""); }}
-                style={{ padding: "0.5rem 1.25rem", backgroundColor: "var(--blue-600)", color: "#ffffff", borderRadius: "0.75rem", fontWeight: 600, fontSize: "0.875rem" }}
+                className="blog-empty-state-btn"
               >
                 Reset Filters
               </button>
             </div>
           )}
 
+          <BlogOverview />
+          <BlogStories />
+          <BlogWriteForUs />
+
           {/* Newsletter CTA */}
           <div className="blog-newsletter-card">
-            <div style={{ position: "relative", zIndex: 10, maxWidth: "42rem", margin: "0 auto" }}>
+            <div className="blog-newsletter-inner">
               <span className="blog-newsletter-badge">
                 <Sparkles size={13} /> Stay Updated
               </span>
@@ -357,7 +287,7 @@ const Blog = () => {
             >
               <div className="blog-modal-header-img-box">
                 <img
-                  src={selectedArticle.image}
+                  src={selectedArticle.image || blogHeroFallback}
                   alt={selectedArticle.title.replace("\n", " ")}
                   className="blog-modal-header-img"
                 />
@@ -368,18 +298,18 @@ const Blog = () => {
                 >
                   <X size={18} />
                 </button>
-                <div style={{ position: "absolute", bottom: "1rem", left: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <span style={{ backgroundColor: "#9333ea", color: "#ffffff", fontSize: "0.75rem", fontWeight: 700, padding: "0.25rem 0.75rem", borderRadius: "9999px", textTransform: "uppercase" }}>
+                <div className="blog-modal-header-badges">
+                  <span className="blog-modal-category-badge">
                     {selectedArticle.category}
                   </span>
-                  <span style={{ backgroundColor: "rgba(15, 23, 42, 0.8)", backdropFilter: "blur(4px)", color: "#ffffff", fontSize: "0.75rem", fontWeight: 500, padding: "0.25rem 0.75rem", borderRadius: "9999px", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                  <span className="blog-modal-readtime-badge">
                     <Clock size={12} /> {selectedArticle.readTime}
                   </span>
                 </div>
               </div>
 
               <div className="blog-modal-body">
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--slate-400)", marginBottom: "0.5rem", fontWeight: 500 }}>
+                <div className="blog-modal-meta-row">
                   <span>By {selectedArticle.author}</span>
                   <span>{selectedArticle.date}</span>
                 </div>
@@ -389,9 +319,9 @@ const Blog = () => {
                 </h2>
 
                 {selectedArticle.tags && (
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.375rem", marginBottom: "1.25rem" }}>
+                  <div className="blog-modal-tags-list">
                     {selectedArticle.tags.map((tag) => (
-                      <span key={tag} style={{ backgroundColor: "var(--slate-100)", color: "var(--slate-600)", fontSize: "11px", fontWeight: 600, padding: "0.125rem 0.625rem", borderRadius: "0.375rem", border: "1px solid rgba(226, 232, 240, 0.6)" }}>
+                      <span key={tag} className="blog-modal-tag-pill">
                         #{tag}
                       </span>
                     ))}
@@ -400,10 +330,10 @@ const Blog = () => {
 
                 {selectedArticle.keyTakeaway && (
                   <div className="blog-modal-takeaway">
-                    <h4 style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--blue-900)", marginBottom: "0.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <Sparkles size={16} color="#2563eb" /> Key Takeaway
+                    <h4 className="blog-modal-takeaway-heading">
+                      <Sparkles size={16} className="blog-takeaway-sparkle-icon" /> Key Takeaway
                     </h4>
-                    <p style={{ fontSize: "0.875rem", color: "var(--blue-800)", lineHeight: 1.625, fontWeight: 500 }}>
+                    <p className="blog-modal-takeaway-text">
                       {selectedArticle.keyTakeaway}
                     </p>
                   </div>
@@ -413,25 +343,25 @@ const Blog = () => {
                   {selectedArticle.content}
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "1rem", borderTop: "1px solid var(--slate-100)" }}>
+                <div className="blog-modal-footer">
                   <button
                     onClick={(e) => toggleBookmark(selectedArticle.id, e)}
-                    style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", fontSize: "0.875rem", fontWeight: 600, color: "var(--slate-600)" }}
+                    className="blog-modal-save-btn"
                   >
-                    <Bookmark size={16} className={bookmarkedIds.includes(selectedArticle.id) ? "fill-blue-600 text-blue-600" : ""} />
+                    <Bookmark size={16} className={bookmarkedIds.includes(selectedArticle.id) ? "blog-bookmark-active" : ""} />
                     {bookmarkedIds.includes(selectedArticle.id) ? "Saved" : "Save Article"}
                   </button>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <div className="blog-modal-actions">
                     <button
                       onClick={(e) => handleShare(selectedArticle, e)}
-                      style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem", padding: "0.5rem 1rem", borderRadius: "0.75rem", fontSize: "0.875rem", fontWeight: 600, color: "var(--slate-600)", backgroundColor: "#f1f5f9" }}
+                      className="blog-modal-share-btn"
                     >
-                      {copiedId === selectedArticle.id ? <><Check size={16} color="#16a34a" /> Copied!</> : <><Share2 size={16} /> Share</>}
+                      {copiedId === selectedArticle.id ? <><Check size={16} className="blog-check-icon" /> Copied!</> : <><Share2 size={16} /> Share</>}
                     </button>
                     <button
                       onClick={() => setSelectedArticle(null)}
-                      style={{ padding: "0.5rem 1.25rem", backgroundColor: "var(--blue-600)", color: "#ffffff", borderRadius: "0.75rem", fontSize: "0.875rem", fontWeight: 600 }}
+                      className="blog-modal-close-action-btn"
                     >
                       Close
                     </button>
@@ -442,6 +372,7 @@ const Blog = () => {
           </div>
         )}
       </AnimatePresence>
+
     </div>
   );
 };

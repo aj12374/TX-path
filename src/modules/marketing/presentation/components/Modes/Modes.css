@@ -1,0 +1,317 @@
+.benefits-strip {
+  width: 100%;
+  padding: 70px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative background glow */
+.benefits-strip::before {
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  top: -180px;
+  left: -120px;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.benefits-strip::after {
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  bottom: -200px;
+  right: -100px;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.Mode-Header {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 2;
+}
+
+.Mode-Header span {
+  display: inline-block;
+  position: relative;
+
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+
+  color: #4f46e5;
+}
+
+/* Header underline */
+.Mode-Header span::after {
+  content: "";
+  display: block;
+
+  width: 45px;
+  height: 3px;
+
+  margin: 10px auto 0;
+
+  border-radius: 20px;
+
+  background: linear-gradient(
+    90deg,
+    #2563eb,
+    #7c3aed
+  );
+}
+
+
+.benefits-container {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+
+  position: relative;
+  z-index: 2;
+}
+
+
+.benefit-item {
+  flex: 1;
+
+  min-height: 250px;
+
+  padding: 30px 38px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  border: 2px solid rgba(148, 163, 184, 0.18);
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.06);
+
+  backdrop-filter: blur(12px);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+
+  position: relative;
+}
+
+
+.benefit-item:hover {
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 20px 45px rgba(37, 99, 235, 0.12);
+
+  border-color: rgba(79, 70, 229, 0.25);
+}
+
+ 
+
+.benefit-icon {
+  width: 78px;
+  height: 78px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 22px;
+
+  border-radius: 20px;
+
+  background: linear-gradient(
+    135deg,
+    #eff6ff,
+    #eef2ff
+  );
+
+  color: #2563eb;
+
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.10);
+
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease,
+    color 0.35s ease;
+}
+
+.benefit-item:hover .benefit-icon {
+  transform: scale(1.08) rotate(-3deg);
+
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #7c3aed
+  );
+
+  color: #ffffff;
+}
+
+
+.benefit-item h3 {
+  margin: 0 0 12px;
+
+  font-size: 21px;
+  font-weight: 700;
+
+  color: #172033;
+
+  letter-spacing: -0.3px;
+}
+
+
+
+.benefit-item p {
+  max-width: 300px;
+
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.7;
+
+  color: #64748b;
+}
+
+
+
+.benefit-live .benefit-icon {
+  color: #2563eb;
+}
+
+.benefit-onsite .benefit-icon {
+  color: #7c3aed;
+}
+
+.benefit-hybrid .benefit-icon {
+  color: #0891b2;
+}
+
+
+
+.benefit-divider {
+  width: 1px;
+
+  margin: 45px 15px;
+
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #cbd5e1,
+    transparent
+  );
+}
+
+
+
+@media (max-width: 900px) {
+  .benefits-strip {
+    padding: 60px 25px;
+  }
+
+  .benefit-item {
+    padding: 25px 20px;
+  }
+
+  .benefit-item h3 {
+    font-size: 19px;
+  }
+
+  .benefit-item p {
+    font-size: 13px;
+  }
+
+  .benefit-icon {
+    width: 68px;
+    height: 68px;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .benefits-strip {
+    padding: 55px 20px;
+  }
+
+  .Mode-Header {
+    margin-bottom: 35px;
+  }
+
+  .benefits-container {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .benefit-item {
+    width: 100%;
+    min-height: auto;
+
+    padding: 30px 25px;
+  }
+
+  .benefit-divider {
+    display: none;
+  }
+
+  .benefit-icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 18px;
+  }
+
+  .benefit-item h3 {
+    font-size: 20px;
+  }
+
+  .benefit-item p {
+    max-width: 450px;
+    font-size: 14px;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .benefits-strip {
+    padding: 45px 15px;
+  }
+
+  .Mode-Header span {
+    font-size: 12px;
+  }
+
+  .benefit-item {
+    padding: 25px 18px;
+  }
+
+  .benefit-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .benefit-item h3 {
+    font-size: 18px;
+  }
+
+  .benefit-item p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
