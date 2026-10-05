@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Download, Filter, Check, X } from "lucide-react";
-import { getTeams } from "./HackethonApi";
+import { getTeams, saveAttendance } from "./HackethonApi";
 import "./Teams.css";
 
 const normalize = (value) =>
@@ -13,9 +13,7 @@ const getField = (team, names) => {
   const keys = Object.keys(team || {});
   const normalizedNames = names.map(normalize);
 
-  const exactKey = keys.find((key) =>
-    normalizedNames.includes(normalize(key))
-  );
+  const exactKey = keys.find((key) => normalizedNames.includes(normalize(key)));
 
   if (exactKey) return team[exactKey];
 
@@ -23,9 +21,7 @@ const getField = (team, names) => {
     const normalizedKey = normalize(key);
 
     return normalizedNames.some(
-      (name) =>
-        normalizedKey.includes(name) ||
-        name.includes(normalizedKey)
+      (name) => normalizedKey.includes(name) || name.includes(normalizedKey),
     );
   });
 
@@ -38,14 +34,10 @@ const getRegistration = (team) =>
     "Registration Number",
     "Registration No",
     "Reg No",
-    "Participant Reg"
+    "Participant Reg",
   ]);
 
-const getTeamName = (team) =>
-  getField(team, [
-    "Team Name",
-    "Team"
-  ]);
+const getTeamName = (team) => getField(team, ["Team Name", "Team"]);
 
 const getTeamLead = (team) =>
   getField(team, [
@@ -56,30 +48,17 @@ const getTeamLead = (team) =>
     "Lead Name",
     "Leader Name",
     "Full Name",
-    "Participant Name"
+    "Participant Name",
   ]);
 
 const getMembers = (team) =>
-  getField(team, [
-    "Team Members",
-    "Members",
-    "Team Member"
-  ]);
+  getField(team, ["Team Members", "Members", "Team Member"]);
 
 const getTechnology = (team) =>
-  getField(team, [
-    "Technologies",
-    "Technology",
-    "Tech Stack",
-    "Tech"
-  ]);
+  getField(team, ["Technologies", "Technology", "Tech Stack", "Tech"]);
 
 const getChallenge = (team) =>
-  getField(team, [
-    "Challenge Title",
-    "Challenge",
-    "Problem Statement"
-  ]);
+  getField(team, ["Challenge Title", "Challenge", "Problem Statement"]);
 
 const getAttendance = (team) =>
   getField(team, [
@@ -87,32 +66,21 @@ const getAttendance = (team) =>
     "Present",
     "Team Present",
     "Attendance Status",
-    "Presence"
+    "Presence",
   ]);
 
 const isPresent = (team) => {
   const value = normalize(getAttendance(team));
 
-  return [
-    "present",
-    "yes",
-    "true",
-    "1",
-    "attended"
-  ].includes(value);
+  return ["present", "yes", "true", "1", "attended"].includes(value);
 };
 
 const isAbsent = (team) => {
   const value = normalize(getAttendance(team));
 
-  return [
-    "absent",
-    "no",
-    "false",
-    "0",
-    "notpresent",
-    "notattended"
-  ].includes(value);
+  return ["absent", "no", "false", "0", "notpresent", "notattended"].includes(
+    value,
+  );
 };
 
 const Teams = () => {
@@ -135,31 +103,40 @@ const Teams = () => {
       setTeams(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
-      setError(
-        err.message || "Unable to load teams"
-      );
+      setError(err.message || "Unable to load teams");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAttendance = (team, status) => {
+  const handleAttendance = async (team, status) => {
     const registrationId = getRegistration(team);
 
-    setTeams((currentTeams) =>
-      currentTeams.map((item) => {
-        if (
-          getRegistration(item) === registrationId
-        ) {
-          return {
-            ...item,
-            Attendance: status
-          };
-        }
+    if (!registrationId) {
+      alert("Registration ID is missing for this team.");
+      return;
+    }
 
-        return item;
-      })
-    );
+    try {
+      await saveAttendance(registrationId, status);
+
+      setTeams((currentTeams) =>
+        currentTeams.map((item) => {
+          if (getRegistration(item) === registrationId) {
+            return {
+              ...item,
+              Attendance: status,
+            };
+          }
+
+          return item;
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+
+      alert(error.message || "Failed to save attendance.");
+    }
   };
 
   const filteredTeams = teams.filter((team) => {
@@ -187,7 +164,7 @@ const Teams = () => {
       "Team Members",
       "Technology",
       "Challenge",
-      "Attendance"
+      "Attendance",
     ];
 
     const rows = filteredTeams.map((team, index) => [
@@ -198,24 +175,19 @@ const Teams = () => {
       getMembers(team),
       getTechnology(team),
       getChallenge(team),
-      getAttendance(team) || "Pending"
+      getAttendance(team) || "Pending",
     ]);
 
-    const csv = [
-      headers,
-      ...rows
-    ]
+    const csv = [headers, ...rows]
       .map((row) =>
         row
-          .map((value) =>
-            `"${String(value ?? "").replace(/"/g, '""')}"`
-          )
-          .join(",")
+          .map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`)
+          .join(","),
       )
       .join("\n");
 
     const blob = new Blob([csv], {
-      type: "text/csv;charset=utf-8;"
+      type: "text/csv;charset=utf-8;",
     });
 
     const url = URL.createObjectURL(blob);
@@ -229,11 +201,7 @@ const Teams = () => {
   };
 
   if (loading) {
-    return (
-      <div className="teams-loading">
-        Loading teams...
-      </div>
-    );
+    return <div className="teams-loading">Loading teams...</div>;
   }
 
   if (error) {
@@ -242,43 +210,28 @@ const Teams = () => {
         <h2>Unable to load teams</h2>
         <p>{error}</p>
 
-        <button onClick={loadTeams}>
-          Try Again
-        </button>
+        <button onClick={loadTeams}>Try Again</button>
       </div>
     );
   }
 
   return (
     <section className="teams-page">
-
       <div className="teams-header">
-
         <div>
           <h1>Team's Section</h1>
         </div>
 
-        <button
-          className="export-btn"
-          onClick={exportCSV}
-        >
+        <button className="export-btn" onClick={exportCSV}>
           <Download size={17} />
           Export CSV
         </button>
-
       </div>
 
       <div className="teams-filters">
-
         <button
-          className={`teams-filter ${
-            activeFilter === "all"
-              ? "active"
-              : ""
-          }`}
-          onClick={() =>
-            setActiveFilter("all")
-          }
+          className={`teams-filter ${activeFilter === "all" ? "active" : ""}`}
+          onClick={() => setActiveFilter("all")}
         >
           <Filter size={15} />
           All
@@ -286,13 +239,9 @@ const Teams = () => {
 
         <button
           className={`teams-filter ${
-            activeFilter === "present"
-              ? "active"
-              : ""
+            activeFilter === "present" ? "active" : ""
           }`}
-          onClick={() =>
-            setActiveFilter("present")
-          }
+          onClick={() => setActiveFilter("present")}
         >
           <Filter size={15} />
           Present
@@ -300,26 +249,18 @@ const Teams = () => {
 
         <button
           className={`teams-filter ${
-            activeFilter === "absent"
-              ? "active"
-              : ""
+            activeFilter === "absent" ? "active" : ""
           }`}
-          onClick={() =>
-            setActiveFilter("absent")
-          }
+          onClick={() => setActiveFilter("absent")}
         >
           <Filter size={15} />
           Absent
         </button>
-
       </div>
 
       <div className="teams-table-card">
-
         <div className="teams-table-wrapper">
-
           <table className="teams-table">
-
             <thead>
               <tr>
                 <th>S.NO</th>
@@ -333,168 +274,99 @@ const Teams = () => {
             </thead>
 
             <tbody>
+              {filteredTeams.map((team, index) => {
+                const attendance = isPresent(team)
+                  ? "Present"
+                  : isAbsent(team)
+                    ? "Absent"
+                    : "Pending";
 
-              {filteredTeams.map(
-                (team, index) => {
+                return (
+                  <tr key={getRegistration(team) || index}>
+                    <td>{index + 1}</td>
 
-                  const attendance =
-                    isPresent(team)
-                      ? "Present"
-                      : isAbsent(team)
-                      ? "Absent"
-                      : "Pending";
+                    <td>
+                      <span className="registration">
+                        {getRegistration(team) ||
+                          `REG-${String(index + 1).padStart(3, "0")}`}
+                      </span>
+                    </td>
 
-                  return (
-                    <tr
-                      key={
-                        getRegistration(team) ||
-                        index
-                      }
-                    >
+                    <td>
+                      <strong>{getTeamLead(team) || "—"}</strong>
+                    </td>
 
-                      <td>
-                        {index + 1}
-                      </td>
+                    <td>
+                      <div className="members-list">
+                        {String(getMembers(team) || "")
+                          .split(",")
+                          .filter(Boolean)
+                          .map((member, memberIndex) => (
+                            <span key={memberIndex}>{member.trim()}</span>
+                          ))}
+                      </div>
+                    </td>
 
-                      <td>
-                        <span className="registration">
-                          {getRegistration(team) ||
-                            `REG-${String(
-                              index + 1
-                            ).padStart(3, "0")}`}
-                        </span>
-                      </td>
+                    <td>
+                      <div className="tech-challenge">
+                        <strong>{getTechnology(team) || "—"}</strong>
 
-                      
+                        <span>{getChallenge(team) || "—"}</span>
+                      </div>
+                    </td>
 
-                      <td>
-                        <strong>
-                          {getTeamLead(team) ||
-                            "—"}
-                        </strong>
-                      </td>
-
-                      <td>
-                        <div className="members-list">
-                          {String(
-                            getMembers(team) || ""
-                          )
-                            .split(",")
-                            .filter(Boolean)
-                            .map(
-                              (
-                                member,
-                                memberIndex
-                              ) => (
-                                <span
-                                  key={memberIndex}
-                                >
-                                  {member.trim()}
-                                </span>
-                              )
-                            )}
-                        </div>
-                      </td>
-
-                      <td>
-                        <div className="tech-challenge">
-                          <strong>
-                            {getTechnology(team) ||
-                              "—"}
-                          </strong>
-
-                          <span>
-                            {getChallenge(team) ||
-                              "—"}
-                          </span>
-                        </div>
-                      </td>
-
-                      <td>
-                        <span
-                          className={`team-status ${
-                            attendance ===
-                            "Present"
-                              ? "status-present"
-                              : attendance ===
-                                "Absent"
+                    <td>
+                      <span
+                        className={`team-status ${
+                          attendance === "Present"
+                            ? "status-present"
+                            : attendance === "Absent"
                               ? "status-absent"
                               : "status-pending"
+                        }`}
+                      >
+                        {attendance === "Present" && <Check size={14} />}
+
+                        {attendance === "Absent" && <X size={14} />}
+
+                        {attendance}
+                      </span>
+                    </td>
+
+                    <td>
+                      <div className="attendance-actions">
+                        <button
+                          className={`attendance-btn present-btn ${
+                            isPresent(team) ? "selected" : ""
                           }`}
+                          onClick={() => handleAttendance(team, "Present")}
                         >
-                          {attendance ===
-                            "Present" && (
-                            <Check size={14} />
-                          )}
+                          <Check size={14} />
+                          Present
+                        </button>
 
-                          {attendance ===
-                            "Absent" && (
-                            <X size={14} />
-                          )}
-
-                          {attendance}
-                        </span>
-                      </td>
-
-                      <td>
-                        <div className="attendance-actions">
-
-                          <button
-                            className={`attendance-btn present-btn ${
-                              isPresent(team)
-                                ? "selected"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              handleAttendance(
-                                team,
-                                "Present"
-                              )
-                            }
-                          >
-                            <Check size={14} />
-                            Present
-                          </button>
-
-                          <button
-                            className={`attendance-btn absent-btn ${
-                              isAbsent(team)
-                                ? "selected"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              handleAttendance(
-                                team,
-                                "Absent"
-                              )
-                            }
-                          >
-                            <X size={14} />
-                            Absent
-                          </button>
-
-                        </div>
-                      </td>
-
-                    </tr>
-                  );
-                }
-              )}
-
+                        <button
+                          className={`attendance-btn absent-btn ${
+                            isAbsent(team) ? "selected" : ""
+                          }`}
+                          onClick={() => handleAttendance(team, "Absent")}
+                        >
+                          <X size={14} />
+                          Absent
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
-
           </table>
 
           {filteredTeams.length === 0 && (
-            <div className="teams-empty">
-              No teams found for this filter.
-            </div>
+            <div className="teams-empty">No teams found for this filter.</div>
           )}
-
         </div>
-
       </div>
-
     </section>
   );
 };

@@ -1,591 +1,388 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { getTeams } from "./HackethonApi";
-import "./Round1.css";
+import React, {
+  useEffect,
+  useState
+} from "react";
 
-const normalize = (value) =>
-  String(value ?? "")
-    .trim()
-    .toLowerCase();
+import {
+  getTeams,
+  saveAttendance
+} from "./HackethonApi";
 
-const getField = (team, fields) => {
-  for (const field of fields) {
-    if (
-      team?.[field] !== undefined &&
-      team?.[field] !== null
-    ) {
-      return team[field];
-    }
-  }
-
-  return "";
-};
-
-const getRegistration = (team) =>
-  getField(team, [
-    "Registration ID",
-    "Registration Number",
-    "Registration No",
-    "Reg No",
-    "Participant Reg"
-  ]);
-
-const getTeamName = (team) =>
-  getField(team, [
-    "Team Name",
-    "Team",
-    "Project Title"
-  ]);
-
-const getLead = (team) =>
-  getField(team, [
-    "Team Lead",
-    "Team Leader",
-    "Team Lead Name",
-    "Team Leader Name",
-    "Lead Name",
-    "Leader Name",
-    "Full Name",
-    "Participant Name",
-    "Lead / Student Full Name"
-  ]);
-
-const getTechnology = (team) =>
-  getField(team, [
-    "Technologies",
-    "Technology",
-    "Tech Stack",
-    "Tech",
-    "Technologies / Languages",
-    "Selected Tech Domains"
-  ]);
 
 function Round1() {
-  const [teams, setTeams] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [teams, setTeams] =
+    useState([]);
 
-  const [innovation, setInnovation] = useState("");
-  const [technical, setTechnical] = useState("");
-  const [presentation, setPresentation] = useState("");
-  const [comments, setComments] = useState("");
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+  const [savingId, setSavingId] =
+    useState(null);
+
+  const [attendance, setAttendance] =
+    useState({});
+
 
   useEffect(() => {
-    loadTeams();
+
+    loadRound1();
+
   }, []);
 
-  const loadTeams = async () => {
+
+  async function loadRound1() {
+
     try {
+
       setLoading(true);
       setError("");
 
-      const data = await getTeams();
+      /*
+       * We load all teams from
+       * the main Sheet.
+       */
+
+      const data =
+        await getTeams();
 
       setTeams(data);
-    } catch (err) {
-      console.error(err);
+
+    } catch (error) {
+
+      console.error(error);
 
       setError(
-        err.message || "Failed to load registration data."
+        error.message ||
+        "Failed to load teams."
       );
+
     } finally {
+
       setLoading(false);
+
     }
-  };
+  }
 
-  /*
-    For the first Round 1 test,
-    display all registrations.
 
-    Later we will change this to:
-    only teams whose attendance is Present.
-  */
-  const presentTeams = useMemo(() => {
-    return teams;
-  }, [teams]);
+  async function handleAttendance(
+    team,
+    value
+  ) {
 
-  const getEvaluation = (team) => {
-    return (
-      team.__round1 || {
-        innovation: "",
-        technical: "",
-        presentation: "",
-        total: "",
-        comments: "",
-        status: "PRESENTED"
-      }
-    );
-  };
+    const registrationId =
+      team.registrationId;
 
-  const openEvaluation = (team) => {
-    const evaluation = getEvaluation(team);
 
-    setSelectedTeam(team);
+    if (!registrationId) {
 
-    setInnovation(evaluation.innovation);
-    setTechnical(evaluation.technical);
-    setPresentation(evaluation.presentation);
-    setComments(evaluation.comments);
-  };
+      alert(
+        "Registration ID not found."
+      );
 
-  const closeEvaluation = () => {
-    setSelectedTeam(null);
-
-    setInnovation("");
-    setTechnical("");
-    setPresentation("");
-    setComments("");
-  };
-
-  const total =
-    Number(innovation || 0) +
-    Number(technical || 0) +
-    Number(presentation || 0);
-
-  const saveEvaluation = (status) => {
-    if (
-      innovation === "" ||
-      technical === "" ||
-      presentation === ""
-    ) {
-      alert("Please enter all three scores.");
       return;
     }
 
-    const registrationId =
-      getRegistration(selectedTeam);
 
-    setTeams((currentTeams) =>
-      currentTeams.map((team) => {
-        if (
-          getRegistration(team) !== registrationId
-        ) {
-          return team;
-        }
-
-        return {
-          ...team,
-
-          __round1: {
-            innovation: Number(innovation),
-            technical: Number(technical),
-            presentation: Number(presentation),
-            total,
-            comments,
-            status
-          }
-        };
-      })
+    setSavingId(
+      registrationId
     );
 
-    closeEvaluation();
-  };
 
-  const getScoreText = (team) => {
-    const evaluation = getEvaluation(team);
+    try {
 
-    if (evaluation.innovation === "") {
-      return (
-        <span className="round1-not-scored">
-          Not scored
-        </span>
+      const result =
+        await saveAttendance(
+          registrationId,
+          value
+        );
+
+
+      setAttendance(
+        previous => ({
+          ...previous,
+          [registrationId]:
+            value
+        })
       );
+
+
+      if (value === "Present") {
+
+        alert(
+          result.message ||
+          "Team added to Round1."
+        );
+
+      } else {
+
+        alert(
+          "Team marked Absent."
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        error.message ||
+        "Failed to save attendance."
+      );
+
+    } finally {
+
+      setSavingId(null);
+
     }
+  }
+
+
+  function getTeamName(team) {
 
     return (
-      <span className="round1-score">
-        {evaluation.innovation}/
-        {evaluation.technical}/
-        {evaluation.presentation}{" "}
-        ={" "}
-        <strong>
-          {evaluation.total}
-        </strong>
-      </span>
+      team.Team_Name ||
+      team.TeamName ||
+      team.teamName ||
+      team["Team Name"] ||
+      "Team"
     );
-  };
+  }
 
-  const getStatus = (team) => {
-    return getEvaluation(team).status;
-  };
+
+  function getLeaderName(team) {
+
+    return (
+      team.Leader ||
+      team.Leader_Name ||
+      team.LeaderName ||
+      team["Leader Name"] ||
+      "-"
+    );
+  }
+
+
+  function getCollege(team) {
+
+    return (
+      team.College ||
+      team.College_Name ||
+      team["College Name"] ||
+      "-"
+    );
+  }
+
 
   if (loading) {
+
     return (
-      <div className="round1-page">
-        <div className="round1-loading">
-          Loading Round 1...
-        </div>
+      <div className="round-loading">
+        Loading Round 1 teams...
       </div>
     );
+
   }
+
 
   if (error) {
+
     return (
-      <div className="round1-page">
-        <div className="round1-error">
+      <div className="round-error">
 
-          <h3>
-            Unable to load Round 1
-          </h3>
+        <p>{error}</p>
 
-          <p>
-            {error}
-          </p>
+        <button
+          onClick={loadRound1}
+        >
+          Retry
+        </button>
 
-          <button onClick={loadTeams}>
-            Try Again
-          </button>
-
-        </div>
       </div>
     );
+
   }
 
+
   return (
+
     <div className="round1-page">
 
-      <div className="round1-card">
+      <div className="round1-header">
 
-        <div className="round1-header">
+        <div>
 
-          <div>
-            TEAM
-          </div>
+          <h1>
+            Round 1
+          </h1>
 
-          <div>
-            TECH
-          </div>
-
-          <div>
-            SCORES (I/T/P)
-          </div>
-
-          <div>
-            STATUS
-          </div>
-
-          <div>
-            SCREENING
-          </div>
+          <p>
+            Check team attendance
+            before evaluation.
+          </p>
 
         </div>
 
-        {presentTeams.length === 0 ? (
 
-          <div className="round1-empty">
-            No teams available for Round 1.
-          </div>
+        <div className="round1-count">
 
-        ) : (
+          <span>
+            Total Teams
+          </span>
 
-          presentTeams.map((team, index) => {
+          <strong>
+            {teams.length}
+          </strong>
 
-            const registrationId =
-              getRegistration(team);
-
-            const teamName =
-              getTeamName(team) ||
-              "Unnamed Team";
-
-            const lead =
-              getLead(team) ||
-              "No team lead";
-
-            const technology =
-              getTechnology(team) ||
-              "Not specified";
-
-            const status =
-              getStatus(team);
-
-            const evaluation =
-              getEvaluation(team);
-
-            const hasScore =
-              evaluation.innovation !== "";
-
-            return (
-              <div
-                className="round1-row"
-                key={
-                  registrationId ||
-                  `round1-team-${index}`
-                }
-              >
-
-                <div className="round1-team">
-
-                  <strong>
-                    {teamName}
-                  </strong>
-
-                  <span>
-                    {registrationId ||
-                      "No registration ID"}{" "}
-                    •{" "}
-                    {lead}
-                  </span>
-
-                </div>
-
-                <div className="round1-tech">
-                  {technology}
-                </div>
-
-                <div className="round1-score-cell">
-                  {getScoreText(team)}
-                </div>
-
-                <div>
-
-                  <span
-                    className={`round1-status ${normalize(
-                      status
-                    ).replace(
-                      /\s+/g,
-                      "-"
-                    )}`}
-                  >
-                    {status}
-                  </span>
-
-                </div>
-
-                <div className="round1-action">
-
-                  <button
-                    onClick={() =>
-                      openEvaluation(team)
-                    }
-                    className={
-                      hasScore
-                        ? "round1-edit-button"
-                        : "round1-setup-button"
-                    }
-                  >
-
-                    {hasScore
-                      ? "Edit Screening"
-                      : "Evaluation Setup"}
-
-                  </button>
-
-                </div>
-
-              </div>
-            );
-          })
-        )}
+        </div>
 
       </div>
 
-      {selectedTeam && (
 
-        <div
-          className="round1-modal-overlay"
-          onClick={closeEvaluation}
-        >
+      <div className="round1-table-wrapper">
 
-          <div
-            className="round1-modal"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
-          >
+        <table className="round1-table">
 
-            <div className="round1-modal-header">
+          <thead>
 
-              <div>
+            <tr>
 
-                <h2>
-                  Round 1 Screening
-                </h2>
+              <th>#</th>
 
-                <p>
-                  Evaluate the team and enter screening marks.
-                </p>
+              <th>
+                Registration ID
+              </th>
 
-              </div>
+              <th>
+                Team
+              </th>
 
-              <button
-                className="round1-close"
-                onClick={closeEvaluation}
-              >
-                ×
-              </button>
+              <th>
+                Leader
+              </th>
 
-            </div>
+              <th>
+                College
+              </th>
 
-            <div className="round1-team-info">
+              <th>
+                Attendance
+              </th>
 
-              <div>
+            </tr>
 
-                <span>
-                  Team
-                </span>
+          </thead>
 
-                <strong>
-                  {getTeamName(selectedTeam)}
-                </strong>
 
-              </div>
+          <tbody>
 
-              <div>
+            {teams.map(
+              (team, index) => {
 
-                <span>
-                  Registration
-                </span>
+                const id =
+                  team.registrationId;
 
-                <strong>
-                  {getRegistration(
-                    selectedTeam
-                  )}
-                </strong>
+                const currentAttendance =
+                  attendance[id];
 
-              </div>
 
-              <div>
+                return (
 
-                <span>
-                  Technology
-                </span>
+                  <tr key={id || index}>
 
-                <strong>
-                  {getTechnology(
-                    selectedTeam
-                  )}
-                </strong>
+                    <td>
+                      {index + 1}
+                    </td>
 
-              </div>
+                    <td>
+                      {id}
+                    </td>
 
-            </div>
+                    <td>
+                      <strong>
+                        {getTeamName(team)}
+                      </strong>
+                    </td>
 
-            <div className="round1-score-grid">
+                    <td>
+                      {getLeaderName(team)}
+                    </td>
 
-              <div className="round1-input-group">
+                    <td>
+                      {getCollege(team)}
+                    </td>
 
-                <label>
-                  Innovation
-                </label>
+                    <td>
 
-                <input
-                  type="number"
-                  min="0"
-                  value={innovation}
-                  onChange={(event) =>
-                    setInnovation(
-                      event.target.value
-                    )
-                  }
-                />
+                      <div className="attendance-buttons">
 
-              </div>
+                        <button
+                          className={
+                            currentAttendance ===
+                            "Present"
+                              ? "present active"
+                              : "present"
+                          }
+                          disabled={
+                            savingId === id
+                          }
+                          onClick={() =>
+                            handleAttendance(
+                              team,
+                              "Present"
+                            )
+                          }
+                        >
+                          {savingId === id
+                            ? "Saving..."
+                            : "Present"}
+                        </button>
 
-              <div className="round1-input-group">
 
-                <label>
-                  Technical
-                </label>
+                        <button
+                          className={
+                            currentAttendance ===
+                            "Absent"
+                              ? "absent active"
+                              : "absent"
+                          }
+                          disabled={
+                            savingId === id
+                          }
+                          onClick={() =>
+                            handleAttendance(
+                              team,
+                              "Absent"
+                            )
+                          }
+                        >
+                          Absent
+                        </button>
 
-                <input
-                  type="number"
-                  min="0"
-                  value={technical}
-                  onChange={(event) =>
-                    setTechnical(
-                      event.target.value
-                    )
-                  }
-                />
+                      </div>
 
-              </div>
+                    </td>
 
-              <div className="round1-input-group">
+                  </tr>
 
-                <label>
-                  Presentation
-                </label>
+                );
 
-                <input
-                  type="number"
-                  min="0"
-                  value={presentation}
-                  onChange={(event) =>
-                    setPresentation(
-                      event.target.value
-                    )
-                  }
-                />
+              }
+            )}
 
-              </div>
+          </tbody>
 
-            </div>
+        </table>
 
-            <div className="round1-total">
-
-              <span>
-                Total Score
-              </span>
-
-              <strong>
-                {total}
-              </strong>
-
-            </div>
-
-            <div className="round1-input-group round1-comments">
-
-              <label>
-                Comments
-              </label>
-
-              <textarea
-                value={comments}
-                onChange={(event) =>
-                  setComments(
-                    event.target.value
-                  )
-                }
-                placeholder="Enter evaluator comments..."
-              />
-
-            </div>
-
-            <div className="round1-modal-actions">
-
-              <button
-                className="round1-eliminate-button"
-                onClick={() =>
-                  saveEvaluation(
-                    "ELIMINATED"
-                  )
-                }
-              >
-                Not Qualify
-              </button>
-
-              <button
-                className="round1-qualify-button"
-                onClick={() =>
-                  saveEvaluation(
-                    "R1 QUALIFIED"
-                  )
-                }
-              >
-                Qualify
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      )}
+      </div>
 
     </div>
+
   );
 }
+
 
 export default Round1;
