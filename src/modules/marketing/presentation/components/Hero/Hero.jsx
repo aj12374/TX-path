@@ -119,9 +119,9 @@ export default function Hero() {
               <span className="hero-button-arrow">→</span>
             </Link>
 
-            <button type="button" className="hero-button hero-button-secondary">
-              Book a platform demo
-            </button>
+            <Link to="/events" className="hero-button hero-button-secondary">
+              <span>Register for Events</span>
+            </Link>
           </div>
 
           <HeroSkills />
